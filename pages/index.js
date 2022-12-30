@@ -29,13 +29,13 @@ export default ({ countries, providers }) => {
 	let [ searchInput, setSearchInput ] = useState('')
 
 	useEffect(() => {
-		console.log("Search: ", searchInput)
+		// console.log("Search: ", searchInput)
 
 		// Search movie or tv show
 		const search = async (query, locale) => {
 
 			// Fetch URL
-			const url = `https://apis.justwatch.com/content/titles/${locale}/popular`
+			const url = `/api/content/titles/${locale}/popular`
 
 			// Query body
 			const body = {
