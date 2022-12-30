@@ -56,8 +56,39 @@ export default ({ countries, providers }) => {
 			return await response.json()
 		}
 
+		const getAllOffers = async (id, type) => {
+
+			const whereToStream = []
+
+			// Loop through all countries
+			await Promise.all(countries.map(async (country) => {
+
+				// Create movie/tv show URL for specific country
+				const url = `/api/content/titles/${type}/${id}/locale/${country.full_locale}`
+
+				// Fetch offers from the country
+				const response = await fetch(url)
+
+				// Get offers as JSON object
+				const stream = await response.json()
+
+				// Add offers to whereToStream if available
+				stream.offers && whereToStream.push(stream)
+			}))
+
+			return whereToStream
+		}
+
 		// Search Movie or TV Show
-		searchInput && search(searchInput, 'en_US').then(response => console.log(response.items))
+		// search("black adam", 'en_US').then(response => {
+		searchInput && search(searchInput, 'en_US').then(response => {
+			// console.log(response.items[0])
+
+			let id = response.items[0].id
+			let type = response.items[0].object_type
+
+			getAllOffers(id, type).then(response => console.log(response))
+		})
 
 	}, [ searchInput ])
 
