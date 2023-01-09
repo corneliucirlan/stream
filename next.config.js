@@ -1,6 +1,7 @@
 module.exports = () => {
 
-	const rewrites = () => {
+	// API Rewrites
+	const rewrites = async () => {
 		return [
 			{
 				source: "/api/:path*",
@@ -10,6 +11,15 @@ module.exports = () => {
 	}
 
 	return {
+
+		// Whitelist images domain
+		images: {
+			domains: [
+				'images.justwatch.com',
+			],
+		},
+
+		// API Rewrites
 		rewrites
 	}
 }
