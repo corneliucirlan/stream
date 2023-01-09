@@ -1,6 +1,6 @@
 import Image from "next/image"
-import { useEffect } from "react"
-import { getMovieInfo, getMovieProviders, getAllProviders, getPhotoID } from "../../utils/justwatch"
+import { getMovieInfo, getMovieProviders, getAllProviders, getPhotoID, getAllCountries } from "../../utils/justwatch"
+import MovieProvider from "../../components/movie-rovider"
 
 export const getStaticPaths = async () => ({
 	paths: [], fallback: true
@@ -8,13 +8,14 @@ export const getStaticPaths = async () => ({
 
 export const getStaticProps = async (context) => ({
 	props: {
-		movie: await getMovieInfo(context.params.id, 'movie', 'en_US'),
-		movieProviders: await getMovieProviders(context.params.id, 'movie'),
-		allProviders: await getAllProviders()
-	}
-})
+		coontries: await getAllCountries(),
+		movie: await getMovieInfo(context.params.id, "movie", "en_US"),
+		movieProviders: await getMovieProviders(context.params.id, "movie"),
+		allProviders: await getAllProviders(),
+	},
+});
 
-export default ({ movie, movieProviders, allProviders }) => {
+export default ({ countries, movie, movieProviders, allProviders }) => {
 	
 	// Loading the movie
 	if (!movie) return <div>Loading</div>
@@ -82,18 +83,30 @@ export default ({ movie, movieProviders, allProviders }) => {
 	console.log("Data: ", data)
 
 	return (
-		<div>
-			{/* <Image
-				src={movie.poster}
-				width="592"
-				height="841"
-				alt={movie.title}
-				style={{ objectFit: 'contain' }}
-			/> */}
+		<div className="container" style={{ color: 'white' }}>
+			<div className="row">
+				<div className="col-12 col-md-3">
+					<Image
+						src={movie.poster}
+						width="592"
+						height="841"
+						alt={movie.title}
+						style={{ objectFit: "contain" }}
+					/>
+				</div>
 
-			{/* {data.map(( provider, key) =>
-				<h1 key={key}>{provider.country}</h1>
-			)} */}
+				<div className="col-12 col-md-6">
+					<h1>{movie.title}</h1>
+					<p>{movie.object_type} / {movie.age_certification} / {movie.original_release_year}</p>
+
+				</div>
+			</div>
+
+			<section className="row">
+				{data.map(( provider, key) =>
+					<MovieProvider key={key} provider={provider} />
+				)}
+			</section>
 		</div>
-	)
+	);
 }
