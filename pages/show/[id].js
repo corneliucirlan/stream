@@ -9,8 +9,8 @@ export const getStaticPaths = async () => ({
 
 export const getStaticProps = async (context) => ({
 	props: {
-		movie: await getMovieInfo(context.params.id, "movie", "en_US"),
-		movieProviders: await getMovieProviders(context.params.id, "movie"),
+		movie: await getMovieInfo(context.params.id, "show", "en_US"),
+		movieProviders: await getMovieProviders(context.params.id, "show"),
 		allProviders: await getAllProviders(),
 	},
 })
@@ -114,7 +114,7 @@ export default ({ movie, movieProviders, allProviders }) => {
 		}
 	})
 
-	// console.log("Data: ", movie)
+	console.log("Data: ", movieProviders);
 
 	return (
 		<div className="container" style={{ color: "white" }}>

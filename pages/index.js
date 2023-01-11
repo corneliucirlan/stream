@@ -8,8 +8,6 @@ export const getStaticProps = async () => ({ props: { countries: await getAllCou
 
 export default ({ countries }) => {
 	
-	// console.log("All countries: ", countries)
-
 	// Store search locale / country
 	let [ searchLocale, setSearchLocale ] = useState('en_US')
 
@@ -22,9 +20,7 @@ export default ({ countries }) => {
 	useEffect(() => {
 
 		// Search Movie or TV Show
-		// searchInput && searchQuery(searchInput, searchLocale).then(response => {
-		searchQuery("black widow", searchLocale).then(response => {
-			console.log(response.items)
+		searchInput && searchQuery(searchInput, searchLocale).then(response => {
 
 			const items = response.items.map(item => {
 				return ({
@@ -53,20 +49,20 @@ export default ({ countries }) => {
 
 	return (
 		<div className="container">
-
 			<div className="row justify-content-center search-box">
 				<div className="col col-md-3">
 					<select
 						className="form-control"
 						onChange={handleLocaleChange}
 					>
-						{countries.map(country =>
+						{countries.map((country) => (
 							<option
+								key={country.exposed_url_part}
 								value={country.full_locale}
 							>
 								{country.country}
 							</option>
-						)}
+						))}
 					</select>
 				</div>
 
@@ -76,24 +72,24 @@ export default ({ countries }) => {
 						className="form-control"
 						onChange={handleSearchChange}
 						value={searchInput}
-						placeholder='Search for a movie or tv show'
+						placeholder="Search for a movie or tv show"
 						autoFocus={true}
 					/>
 				</div>
 			</div>
 
 			<div className="row">
-				{searchResults && searchResults.map(result =>
-					<MovieCard
-						key={result.id}
-						id={result.id}
-						title={result.title}
-						type={result.type}
-						poster={result.poster}
-					/>
-				)}
+				{searchResults &&
+					searchResults.map((result) => (
+						<MovieCard
+							key={result.id}
+							id={result.id}
+							title={result.title}
+							type={result.type}
+							poster={result.poster}
+						/>
+					))}
 			</div>
-
 		</div>
-	)
+	);
 }

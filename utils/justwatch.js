@@ -108,7 +108,10 @@ export const getPhotoID = poster => {
 
 	// Photo regex pattern
 	const photoRegex = new RegExp("\\s*([0-9]+)")
-
+	
+	let photo = photoRegex.exec(poster)
+	if (photo === null) return null
+	
 	// Return photo id
-	return photoRegex.exec(poster)[0]
+	return photo[0]
 }
