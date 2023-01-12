@@ -1,36 +1,49 @@
-// Get all available countries
+/**
+ * Fetches and returns the data for all countries
+ * @returns {Object} - An object containing the data for all countries
+ */
 export const getAllCountries = async () => {
-	return await (await fetch(`https://apis.justwatch.com/content/locales/state`)).json()
+	return await (
+		await fetch(`https://apis.justwatch.com/content/locales/state`)
+	).json()
 }
 
-// Search for input query on JustWatch
+/**
+ * Sends a search query to the API and returns the results
+ * @param {string} query - The search query
+ * @param {string} locale - The locale of the search query (e.g. "en_US", "fr_FR")
+ * @returns {Object} - An object containing the search results
+ */
 export const searchQuery = async (query, locale) => {
 
 	// Fetch URL
 	const url = `/api/content/titles/${locale}/popular`
 
-	// Query body
-	const body = {
-		"query": query,
-	}
-
 	// Fetch results
 	const response = await fetch(url, {
 		method: "POST",
-		body: JSON.stringify(body),
+		body: JSON.stringify({
+			query: query,
+		}),
 		headers: {
-			'Content-Type': 'application/json',
-			"X-Requested-With": "fetch"
-		}
+			"Content-Type": "application/json",
+			"X-Requested-With": "fetch",
+		},
 	})
 
 	// Return results as JSON object
 	return await response.json()
 }
 
-// Get all information about a movie or tv show
+/**
+ * Fetches and returns the movie information for a given id and type
+ * @param {string} id - The id of the movie
+ * @param {string} type - The type of movie (e.g. "movie", "show")
+ * @param {string} locale - The locale of the movie (e.g. "en_US", "fr_FR")
+ * @returns {Object} - An object containing the movie information
+ */
 export const getMovieInfo = async (id, type, locale) => {
-
+	
 	// Fetch URL
 	const url = `https://apis.justwatch.com/content/titles/${type}/${id}/locale/${locale}`
 
@@ -58,43 +71,51 @@ export const getMovieInfo = async (id, type, locale) => {
 		object_type,
 		original_release_year,
 		short_description,
-		credits
+		credits,
 	}
 }
 
-// Get all streaming platforms available for a movie or tv show worldwide
+/**
+ * Fetches and returns the providers data for a given movie id and type
+ * @param {string} id - The id of the movie
+ * @param {string} type - The type of movie (e.g. "movie", "show")
+ * @returns {Object[]} - An array of objects containing the providers data for the movie
+ */
 export const getMovieProviders = async (id, type) => {
-
+	
 	// Get all available countries
-	const countries = await getAllCountries()
+	const countries = await getAllCountries();
 
 	// Loop through all countries
-	let whereToStream = await Promise.all(countries.map(async (country) => {
+	let whereToStream = await Promise.all(
+		countries.map(async (country) => {
+			// Create movie/tv show URL for specific country
+			const url = `https://apis.justwatch.com/content/titles/${type}/${id}/locale/${country.full_locale}`;
 
-		// Create movie/tv show URL for specific country
-		const url = `https://apis.justwatch.com/content/titles/${type}/${id}/locale/${country.full_locale}`
+			// Fetch offers from the country
+			const response = await fetch(url);
 
-		// Fetch offers from the country
-		const response = await fetch(url)
+			// Get offers as JSON object
+			const stream = await response.json();
 
-		// Get offers as JSON object
-		const stream = await response.json()
+			// No offers available
+			if (!stream.offers) return null;
 
-		// No offers available
-		if (! stream.offers) return null
-		
-		// Return offers if available
-		return {
-			name: country.country,
-			// full_locale: country.full_locale,
-			offers: stream.offers
-		}
-	}))
+			// Return offers if available
+			return {
+				name: country.country,
+				// full_locale: country.full_locale,
+				offers: stream.offers,
+			};
+		})
+	);
 
+	// Fiter out null values and sort by name
 	let filteredAndSorted = whereToStream
 		.filter(Boolean)
-		.sort((a, b) => (a.name > b.name ? 1 : -1))
+		.sort((a, b) => (a.name > b.name ? 1 : -1));
 
+	// Reformat the provider data and return a new array
 	let revizedMovieProviders = filteredAndSorted.map((provider) => {
 		let offers = provider.offers.map(
 			({ provider_id, monetization_type, presentation_type }) => {
@@ -111,71 +132,76 @@ export const getMovieProviders = async (id, type) => {
 			offers: offers,
 		};
 	});
-		
-	return revizedMovieProviders
+
+	return revizedMovieProviders;
 }
 
+/**
+ * Fetches and returns the data for all providers
+ * @returns {Object} - An object containing the data for all providers
+ */
 export const getAllProviders = async () => {
+
+	// Get all countries
 	const countries = await getAllCountries()
-	const providers = await Promise.all(countries.map(country =>
-		fetch(`https://apis.justwatch.com/content/providers/locale/${country.full_locale}`)
-			.then(response => response.json())
-	))
 
-	let reducedProviders = providers.reduce((acc, provider) => {
-		provider.forEach((p) => {
-			if (!acc[p.id.toString()]) {
-				acc[p.id.toString()] = {
-					technical_name: p.technical_name,
-					slug: p.slug,
-					short_name: p.short_name,
-					clear_name: p.clear_name,
-					icon_url: p.icon_url,
-					icon_blur_hash: p.icon_blur_hash,
-				}
+	// Fetch providers data for each country and wait for all responses
+	const providers = await Promise.all(
+		countries.map(async (country) => {
+			const response = await fetch(
+				`https://apis.justwatch.com/content/providers/locale/${country.full_locale}`
+			)
+			return response.json()
+		})
+	)
+
+	// Flatten the providers array, and reduce it to an object containing only unique providers
+	return providers.flat().reduce((acc, provider) => {
+		if (!acc[provider.id]) {
+			acc[provider.id] = {
+				clear_name: provider.clear_name,
+				icon_url: provider.icon_url,
 			}
-    	})
-
+		}
 		return acc
 	}, {})
-
-	let revizedallProviders = {};
-	Object.values(reducedProviders).forEach((provider, key) => {
-		revizedallProviders[key] = {
-			clear_name: provider.clear_name,
-			icon_url: provider.icon_url,
-		};
-	});
-
-	return revizedallProviders
 }
 
-export const getPhotoID = poster => {
+/**
+ * Extracts the photo id from a poster string
+ * @param {string} poster - The poster string to extract the photo id from
+ * @returns {string|null} - The photo id, or null if not found
+ */
+export const getPhotoID = (poster) => {
 
-	// Photo regex pattern
-	const photoRegex = new RegExp("\\s*([0-9]+)")
-	
-	let photo = photoRegex.exec(poster)
-	if (photo === null) return null
-	
-	// Return photo id
-	return photo[0]
+	// Regular expression to match photo id
+	const photoRegex = /\s*([0-9]+)/
+
+	// Execute the regular expression on the poster string
+	const photo = photoRegex.exec(poster)
+
+	// Return the matched photo id, or null if not found
+	return photo?.[0] || null
 }
 
+/**
+ * Fetches and returns movie data for a given movie id and type
+ * @param {string} id - The id of the movie
+ * @param {string} type - The type of movie (e.g. "movie", "show")
+ * @returns {Object[]} - An array of objects containing the movie data for each country
+ */
 export const getMovieData = async (id, type) => {
 	
 	// Get movie providers
 	let movieProviders = await getMovieProviders(id, type)
-	
+
 	// Get all providers
 	let allProviders = await getAllProviders()
 
 	// Return movie data
 	return movieProviders.map((provider) => {
-
 		// Get offers by monetization type
 		const getOffersByType = (providerOffers, monetization) => {
-
 			// Filter and map offers in a single step
 			let offers = providerOffers
 				.filter((offer) => offer.monetization_type === monetization)
@@ -247,7 +273,7 @@ export const getMovieData = async (id, type) => {
 					return acc
 				},
 				{}
-			)
+			),
 		}
 	})
 }
