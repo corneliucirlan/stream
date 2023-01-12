@@ -40,10 +40,6 @@ export default ({ countries }) => {
 	// Save search country
 	const handleLocaleChange = event => setSearchLocale(event.target.value)
 
-	useEffect(() =>{
-		console.log("LOCALE: ", searchLocale)
-	}, [searchLocale])
-
 	// Save search input
 	const handleSearchChange = event => setSearchInput(event.target.value)
 
@@ -88,8 +84,8 @@ export default ({ countries }) => {
 							type={result.type}
 							poster={result.poster}
 						/>
-					))}
+				))}
 			</div>
 		</div>
-	);
+	)
 }
