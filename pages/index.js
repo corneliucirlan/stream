@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 import MovieCard from "../components/movie-card"
-import { getPhotoID, searchQuery, getAllCountries, getAllAvailableProviders } from "../utils/justwatch"
+import { getPhotoID, searchQuery, getAllCountries } from "../utils/justwatch"
 
 // Get list of all countries
 export const getStaticProps = async () => ({ props: { countries: await getAllCountries() } })
@@ -76,7 +76,7 @@ export default ({ countries }) => {
 
 			<div className="row">
 				{searchResults &&
-					searchResults.map((result) => (
+					searchResults.map(result => (
 						<MovieCard
 							key={result.id}
 							id={result.id}

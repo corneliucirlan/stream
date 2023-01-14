@@ -49,6 +49,7 @@ export const getMovieInfo = async (id, type, locale) => {
 
 	// Fetch results
 	const response = await fetch(url)
+	const movieInfo = await response.json()
 
 	// Get movie data
 	let {
@@ -58,16 +59,26 @@ export const getMovieInfo = async (id, type, locale) => {
 		original_release_year,
 		short_description,
 		credits,
-	} = await response.json()
+	} = movieInfo
 
 	// Update movie poster
 	const posterId = getPhotoID(poster)
 	poster = `https://images.justwatch.com/poster/${posterId}/s592/poster.webp`
+	
+	// Get movie backdrops IDs
+	const backdrops = movieInfo.backdrops.map(backdrop =>
+		getPhotoID(backdrop.backdrop_url)
+	)
+
+	// Get movie slug
+	const slug = movieInfo.full_path.split('/').pop()
 
 	// Return movie data
 	return {
 		title,
 		poster,
+		backdrops,
+		slug,
 		object_type,
 		original_release_year,
 		short_description,
@@ -84,36 +95,36 @@ export const getMovieInfo = async (id, type, locale) => {
 export const getMovieProviders = async (id, type) => {
 	
 	// Get all available countries
-	const countries = await getAllCountries();
+	const countries = await getAllCountries()
 
 	// Loop through all countries
 	let whereToStream = await Promise.all(
 		countries.map(async (country) => {
 			// Create movie/tv show URL for specific country
-			const url = `https://apis.justwatch.com/content/titles/${type}/${id}/locale/${country.full_locale}`;
+			const url = `https://apis.justwatch.com/content/titles/${type}/${id}/locale/${country.full_locale}`
 
 			// Fetch offers from the country
-			const response = await fetch(url);
+			const response = await fetch(url)
 
 			// Get offers as JSON object
-			const stream = await response.json();
+			const stream = await response.json()
 
 			// No offers available
-			if (!stream.offers) return null;
+			if (!stream.offers) return null
 
 			// Return offers if available
 			return {
 				name: country.country,
 				// full_locale: country.full_locale,
 				offers: stream.offers,
-			};
+			}
 		})
-	);
+	)
 
 	// Fiter out null values and sort by name
 	let filteredAndSorted = whereToStream
 		.filter(Boolean)
-		.sort((a, b) => (a.name > b.name ? 1 : -1));
+		.sort((a, b) => (a.name > b.name ? 1 : -1))
 
 	// Reformat the provider data and return a new array
 	let revizedMovieProviders = filteredAndSorted.map((provider) => {
@@ -123,17 +134,17 @@ export const getMovieProviders = async (id, type) => {
 					provider_id,
 					monetization_type,
 					presentation_type,
-				};
+				}
 			}
-		);
+		)
 
 		return {
 			name: provider.name,
 			offers: offers,
-		};
-	});
+		}
+	})
 
-	return revizedMovieProviders;
+	return revizedMovieProviders
 }
 
 /**
