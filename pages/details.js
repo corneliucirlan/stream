@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 import Image from "next/image"
-import { getMovieInfo, getMovieData } from "../utils/justwatch"
+import { getMovieInfo, getMovieData, getRandomBackdropID, API_IMAGES_URL } from "../utils/justwatch"
 import MovieProvider from "../components/movie-rovider"
 
 export const getServerSideProps = async (context) => ({
@@ -22,10 +22,8 @@ export default ({ movie, data }) => {
 	// Set background image
 	useEffect(() => {
 		setBackgroundImage(
-			`url(https://images.justwatch.com/backdrop/${
-				movie.backdrops[
-					Math.floor(Math.random() * movie.backdrops.length)
-				]
+			`url(${API_IMAGES_URL}/backdrop/${
+				getRandomBackdropID(movie.backdrops)
 			}/s1920/${movie.slug})`
 		);
 	}, [])

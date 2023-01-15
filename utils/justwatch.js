@@ -1,12 +1,61 @@
+const API_BASE_URL = "https://apis.justwatch.com"
+const HEADERS = {
+	"Content-Type": "application/json",
+	"X-Requested-With": "fetch",
+}
+export const API_IMAGES_URL = "https://images.justwatch.com"
+
 /**
  * Fetches and returns the data for all countries
  * @returns {Object} - An object containing the data for all countries
  */
 export const getAllCountries = async () => {
-	return await (
-		await fetch(`https://apis.justwatch.com/content/locales/state`)
-	).json()
+	return (await (await fetch(`${API_BASE_URL}/content/locales/state`))
+		.json())
+		.sort((a, b) => (a.country > b.country ? 1 : -1))
 }
+
+/**
+ * Get a background image for the homepage from the most popular movie/show
+ * @returns {String} Background image URL
+ */
+export const getHomepageBackdrop = async () => {
+
+	// Get the most popular movies and shows
+	let response = await fetch(
+		`${API_BASE_URL}/content/titles/en_US/popular`,
+		{
+			method: "POST",
+			body: JSON.stringify({
+				content_types: ["movie", "show"],
+			}),
+			headers: HEADERS,
+		}
+	)
+
+	// List of most popular movies and shows
+	const popular = await response.json()
+
+	// Most popular movie/show details
+	const movieInfo = await getMovieInfo(
+		popular.items[0].id,
+		popular.items[0].object_type,
+		"en_US"
+	)
+
+	// Return a backdrop URL
+	return `${API_IMAGES_URL}/backdrop/${getRandomBackdropID(
+		movieInfo.backdrops
+	)}/s1920/${movieInfo.slug}`
+}
+
+/**
+ * Get a random backdrop id from an array of ids
+ * @param {Array} ids Array of ids to choose from
+ * @returns {String} Randomly generated backdrop id
+ */
+export const getRandomBackdropID = ids =>
+	ids[Math.floor(Math.random() * ids.length)]
 
 /**
  * Sends a search query to the API and returns the results
@@ -17,7 +66,7 @@ export const getAllCountries = async () => {
 export const searchQuery = async (query, locale) => {
 
 	// Fetch URL
-	const url = `/api/content/titles/${locale}/popular`
+	const url = `${API_BASE_URL}/content/titles/${locale}/popular`
 
 	// Fetch results
 	const response = await fetch(url, {
@@ -25,10 +74,7 @@ export const searchQuery = async (query, locale) => {
 		body: JSON.stringify({
 			query: query,
 		}),
-		headers: {
-			"Content-Type": "application/json",
-			"X-Requested-With": "fetch",
-		},
+		headers: HEADERS,
 	})
 
 	// Return results as JSON object
@@ -45,7 +91,7 @@ export const searchQuery = async (query, locale) => {
 export const getMovieInfo = async (id, type, locale) => {
 	
 	// Fetch URL
-	const url = `https://apis.justwatch.com/content/titles/${type}/${id}/locale/${locale}`
+	const url = `${API_BASE_URL}/content/titles/${type}/${id}/locale/${locale}`
 
 	// Fetch results
 	const response = await fetch(url)
@@ -63,7 +109,7 @@ export const getMovieInfo = async (id, type, locale) => {
 
 	// Update movie poster
 	const posterId = getPhotoID(poster)
-	poster = `https://images.justwatch.com/poster/${posterId}/s592/poster.webp`
+	poster = `${API_IMAGES_URL}/poster/${posterId}/s592/poster.webp`
 	
 	// Get movie backdrops IDs
 	const backdrops = movieInfo.backdrops.map(backdrop =>
@@ -100,8 +146,9 @@ export const getMovieProviders = async (id, type) => {
 	// Loop through all countries
 	let whereToStream = await Promise.all(
 		countries.map(async (country) => {
+
 			// Create movie/tv show URL for specific country
-			const url = `https://apis.justwatch.com/content/titles/${type}/${id}/locale/${country.full_locale}`
+			const url = `${API_BASE_URL}/content/titles/${type}/${id}/locale/${country.full_locale}`
 
 			// Fetch offers from the country
 			const response = await fetch(url)
@@ -160,7 +207,7 @@ export const getAllProviders = async () => {
 	const providers = await Promise.all(
 		countries.map(async (country) => {
 			const response = await fetch(
-				`https://apis.justwatch.com/content/providers/locale/${country.full_locale}`
+				`${API_BASE_URL}/content/providers/locale/${country.full_locale}`
 			)
 			return response.json()
 		})
@@ -211,8 +258,10 @@ export const getMovieData = async (id, type) => {
 
 	// Return movie data
 	return movieProviders.map((provider) => {
+
 		// Get offers by monetization type
 		const getOffersByType = (providerOffers, monetization) => {
+
 			// Filter and map offers in a single step
 			let offers = providerOffers
 				.filter((offer) => offer.monetization_type === monetization)
@@ -228,7 +277,7 @@ export const getMovieData = async (id, type) => {
 							allProviders[provider_id].clear_name,
 						icon:
 							typeof allProviders[provider_id] !== "undefined"
-								? `https://images.justwatch.com/icon/${getPhotoID(
+								? `${API_IMAGES_URL}/icon/${getPhotoID(
 										allProviders[provider_id].icon_url
 								  )}/s100`
 								: null,
