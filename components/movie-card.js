@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 
 export default ({ id, title, type, poster }) => (
-	<article className="col-12 col-md-2 card">
+	<article className="col-6 col-md-2 card">
 		<Link href={`/details?type=${type}&id=${id}`} target="_blank">
 			<Image
 				src={poster}
