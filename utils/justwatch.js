@@ -66,7 +66,7 @@ export const getRandomBackdropID = ids =>
 export const searchQuery = async (query, locale) => {
 
 	// Fetch URL
-	const url = `${API_BASE_URL}/content/titles/${locale}/popular`
+	const url = `/api/content/titles/${locale}/popular`
 
 	// Fetch results
 	const response = await fetch(url, {
