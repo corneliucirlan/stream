@@ -13,6 +13,9 @@ export const getServerSideProps = async (context) => ({
 
 export default ({ movie, data }) => {
 
+	// Filter out empty elements
+	data = data.filter(result => Object.entries(result.offers).length > 0)
+
 	// Loading the movie
 	if (!movie) return <div>Loading</div>
 
@@ -77,5 +80,5 @@ export default ({ movie, data }) => {
 				</section>
 			</div>
 		</>
-	)
+	);
 }

@@ -9,11 +9,10 @@ export default ({ id, title, type, poster }) => (
 				width="592"
 				height="841"
 				alt={title}
-				style={{ objectFit: "contain" }}
 			/>
 			<div className="card-background">
 				<h6 className="card-title">{title}</h6>
 			</div>
 		</Link>
 	</article>
-);
+)

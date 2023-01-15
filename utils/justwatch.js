@@ -257,7 +257,7 @@ export const getMovieData = async (id, type) => {
 	let allProviders = await getAllProviders()
 
 	// Return movie data
-	return movieProviders.map((provider) => {
+	return movieProviders.map(provider => {
 
 		// Get offers by monetization type
 		const getOffersByType = (providerOffers, monetization) => {
