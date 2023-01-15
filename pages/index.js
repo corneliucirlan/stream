@@ -44,6 +44,7 @@ export default ({ countries, backroundURL }) => {
 						poster: `${API_IMAGES_URL}/poster/${getPhotoID(
 							item.poster
 						)}/s592/poster.webp`,
+						posterBlurHash: item.poster_blur_hash,
 						type: item.object_type,
 						releasseYear: item.original_release_year,
 					}
@@ -71,6 +72,7 @@ export default ({ countries, backroundURL }) => {
 				<div className="row justify-content-center search-box">
 					<div className="col col-md-3">
 						<select
+							defaultValue='en_US'
 							className="form-control"
 							onChange={handleLocaleChange}
 						>
@@ -78,7 +80,6 @@ export default ({ countries, backroundURL }) => {
 								<option
 									key={country.exposed_url_part}
 									value={country.full_locale}
-									selected={country.full_locale === 'en_US'}
 								>
 									{country.country}
 								</option>
