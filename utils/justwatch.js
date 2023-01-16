@@ -56,7 +56,7 @@ export const getHomepageBackdrop = async () => {
  * @returns {String} Randomly generated backdrop id
  */
 export const getRandomBackdropID = ids =>
-	ids[Math.floor(Math.random() * ids.length)]
+	ids !== null ? ids[Math.floor(Math.random() * ids.length)] : null
 
 /**
  * Sends a search query to the API and returns the results
@@ -113,9 +113,12 @@ export const getMovieInfo = async (id, type, locale) => {
 	poster = `${API_IMAGES_URL}/poster/${posterId}/s592/poster.webp`
 	
 	// Get movie backdrops IDs
-	const backdrops = movieInfo.backdrops.map(backdrop =>
-		getPhotoID(backdrop.backdrop_url)
-	)
+	const backdrops =
+		movieInfo.backdrops === undefined
+			? null
+			: movieInfo.backdrops.map((backdrop) =>
+					getPhotoID(backdrop.backdrop_url)
+			  )
 
 	// Get movie slug
 	const slug = movieInfo.full_path.split('/').pop()
