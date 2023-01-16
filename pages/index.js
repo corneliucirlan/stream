@@ -47,7 +47,7 @@ export default ({ countries, backroundURL }) => {
 						)}/s592/poster.webp`,
 						posterBlurHash: item.poster_blur_hash,
 						type: item.object_type,
-						releasseYear: item.original_release_year,
+						releaseYear: item.original_release_year,
 					}
 				})
 
@@ -110,6 +110,7 @@ export default ({ countries, backroundURL }) => {
 								type={result.type}
 								poster={result.poster}
 								locale={searchLocale}
+								releaseYear={result.releaseYear}
 							/>
 						))}
 				</div>

@@ -4,10 +4,10 @@ import Image from "next/image"
 import { getMovieInfo, getMovieData, getRandomBackdropID, API_IMAGES_URL } from "../utils/justwatch"
 import MovieProvider from "../components/movie-rovider"
 
-export const getServerSideProps = async (context) => ({
+export const getServerSideProps = async ({ query }) => ({
 	props: {
-		movie: await getMovieInfo(context.query.id, context.query.type, context.query.locale),
-		data: await getMovieData(context.query.id, context.query.type)
+		movie: await getMovieInfo(query.id, query.type, query.locale),
+		data: await getMovieData(query.id, query.type)
 	}
 })
 
