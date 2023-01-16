@@ -4,6 +4,7 @@ const HEADERS = {
 	"X-Requested-With": "fetch",
 }
 export const API_IMAGES_URL = "https://images.justwatch.com"
+export const DEFAULT_LOCALE = "en_US"
 
 /**
  * Fetches and returns the data for all countries
@@ -23,7 +24,7 @@ export const getHomepageBackdrop = async () => {
 
 	// Get the most popular movies and shows
 	let response = await fetch(
-		`${API_BASE_URL}/content/titles/en_US/popular`,
+		`${API_BASE_URL}/content/titles/${DEFAULT_LOCALE}/popular`,
 		{
 			method: "POST",
 			body: JSON.stringify({
@@ -40,7 +41,7 @@ export const getHomepageBackdrop = async () => {
 	const movieInfo = await getMovieInfo(
 		popular.items[0].id,
 		popular.items[0].object_type,
-		"en_US"
+		DEFAULT_LOCALE
 	)
 
 	// Return a backdrop URL

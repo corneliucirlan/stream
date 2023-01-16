@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import MovieCard from "../components/movie-card"
 import {
 	API_IMAGES_URL,
+	DEFAULT_LOCALE,
 	getPhotoID,
 	searchQuery,
 	getAllCountries,
@@ -15,7 +16,7 @@ export const getStaticProps = async () => ({ props: { countries: await getAllCou
 export default ({ countries, backroundURL }) => {
 
 	// Store search locale / country
-	let [ searchLocale, setSearchLocale ] = useState("en_US")
+	let [ searchLocale, setSearchLocale ] = useState(DEFAULT_LOCALE)
 
 	// Store search box state
 	let [ searchInput, setSearchInput ] = useState("")
@@ -72,7 +73,7 @@ export default ({ countries, backroundURL }) => {
 				<div className="row justify-content-center search-box">
 					<div className="col col-md-3">
 						<select
-							defaultValue='en_US'
+							defaultValue={DEFAULT_LOCALE}
 							className="form-control"
 							onChange={handleLocaleChange}
 						>
@@ -108,6 +109,7 @@ export default ({ countries, backroundURL }) => {
 								title={result.title}
 								type={result.type}
 								poster={result.poster}
+								locale={searchLocale}
 							/>
 						))}
 				</div>

@@ -6,7 +6,7 @@ import MovieProvider from "../components/movie-rovider"
 
 export const getServerSideProps = async (context) => ({
 	props: {
-		movie: await getMovieInfo(context.query.id, context.query.type, "en_US"),
+		movie: await getMovieInfo(context.query.id, context.query.type, context.query.locale),
 		data: await getMovieData(context.query.id, context.query.type)
 	}
 })
@@ -28,7 +28,7 @@ export default ({ movie, data }) => {
 			`url(${API_IMAGES_URL}/backdrop/${
 				getRandomBackdropID(movie.backdrops)
 			}/s1920/${movie.slug})`
-		);
+		)
 	}, [])
 
 	return (
@@ -80,5 +80,5 @@ export default ({ movie, data }) => {
 				</section>
 			</div>
 		</>
-	);
+	)
 }
