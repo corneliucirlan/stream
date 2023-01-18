@@ -53,7 +53,7 @@ export default ({ movie, data }) => {
 
 					<div className="col-12 col-md-9">
 						<h1>{movie.title}</h1>
-						<p className="offer-type">
+						<p className="offer-type sub-title">
 							{movie.object_type} / {movie.original_release_year}
 						</p>
 						<p className="offer-short-description">
@@ -61,8 +61,8 @@ export default ({ movie, data }) => {
 						</p>
 						<h5 className="offer-cast-title">Cast</h5>
 						<div className="row d-flex">
-							{movie.credits.slice(0, 3).map((credit) => (
-								<div key={credit.person_id} className="col-4">
+							{movie.credits.slice(0, 4).map((credit) => (
+								<div key={credit.person_id} className="col-4" style={{width: 'auto', maxWidth: '230px', marginRight: '3rem'}}>
 									<p className="actor-name">{credit.name}</p>
 									<p className="actor-character">
 										{credit.character_name}

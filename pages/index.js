@@ -71,7 +71,7 @@ export default ({ countries, backroundURL }) => {
 			></div>
 			<div className="container">
 				<div className="row justify-content-center search-box">
-					<div className="col col-md-3">
+					<div className="col col-md-2">
 						<select
 							defaultValue={DEFAULT_LOCALE}
 							className="form-control"
@@ -88,7 +88,7 @@ export default ({ countries, backroundURL }) => {
 						</select>
 					</div>
 
-					<div className="col col-md-6">
+					<div className="col col-md-4">
 						<input
 							type="text"
 							className="form-control"
