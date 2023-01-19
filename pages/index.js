@@ -1,3 +1,4 @@
+import Head from "next/head"
 import { useEffect, useState } from "react"
 
 import MovieCard from "../components/movie-card"
@@ -63,6 +64,10 @@ export default ({ countries, backroundURL }) => {
 
 	return (
 		<>
+			<Head>
+				<title>Global Streaming Search for Movies and TV Shows</title>
+				<meta name="description" content="A web app designed for easy searching of global streaming options for movies and TV shows." />
+			</Head>
 			<div
 				className="bg-image bg-image-frontpage"
 				style={{

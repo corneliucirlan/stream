@@ -1,3 +1,4 @@
+import Head from "next/head"
 import { useEffect, useState } from "react"
 
 import Image from "next/image"
@@ -33,6 +34,16 @@ export default ({ movie, data }) => {
 
 	return (
 		<>
+			<Head>
+				<title>Stream {movie.title}</title>
+				<meta
+					name="description"
+					content={`Globally available streaming options for "${movie.title}" ${
+						movie.object_type == "movie" ? "movie" : "TV show"
+					}`}
+				/>
+			</Head>
+
 			<div
 				className="bg-image"
 				style={{
@@ -62,7 +73,15 @@ export default ({ movie, data }) => {
 						<h5 className="offer-cast-title">Cast</h5>
 						<div className="row d-flex">
 							{movie.credits.slice(0, 4).map((credit) => (
-								<div key={credit.person_id} className="col-4" style={{width: 'auto', maxWidth: '230px', marginRight: '3rem'}}>
+								<div
+									key={credit.person_id}
+									className="col-4"
+									style={{
+										width: "auto",
+										maxWidth: "230px",
+										marginRight: "3rem",
+									}}
+								>
 									<p className="actor-name">{credit.name}</p>
 									<p className="actor-character">
 										{credit.character_name}
