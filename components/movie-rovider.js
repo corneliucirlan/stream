@@ -3,7 +3,7 @@ import OfferCategory from "./offer-category"
 export default ({ provider }) => (
 	<div className="col-12 offers-country-container">
 		<div className="offers-country">
-			<h2 className="provider-country">{provider.country}</h2>
+			<h2 className="title-country">{provider.country}</h2>
 
 			{provider.offers.flatrate && (
 				<OfferCategory

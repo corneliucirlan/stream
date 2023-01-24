@@ -68,15 +68,17 @@ export default ({ countries, backroundURL }) => {
 				<title>Global Streaming Search for Movies and TV Shows</title>
 				<meta name="description" content="A web app designed for easy searching of global streaming options for movies and TV shows." />
 			</Head>
+
 			<div
 				className="bg-image bg-image-frontpage"
 				style={{
 					backgroundImage: backgroundImage,
 				}}
 			></div>
+
 			<div className="container">
 				<div className="row justify-content-center search-box">
-					<div className="col col-md-2">
+					<div className="col-12 col-md-2">
 						<select
 							defaultValue={DEFAULT_LOCALE}
 							className="form-control"
@@ -93,7 +95,7 @@ export default ({ countries, backroundURL }) => {
 						</select>
 					</div>
 
-					<div className="col col-md-4">
+					<div className="col-12 col-md-4">
 						<input
 							type="text"
 							className="form-control"

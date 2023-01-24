@@ -3,9 +3,12 @@ html
 
 body
 	color: $white
-	padding-top: 10 * $spacer
+	padding-top: 5 * $spacer
 	background-color: $black
-	
+
+	@include media-breakpoint-up(md)
+		padding-top: 10 * $spacer
+
 .row
 	--#{$prefix}gutter-x: 3rem
 	--#{$prefix}gutter-y: 3rem

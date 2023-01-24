@@ -50,6 +50,7 @@ export default ({ movie, data }) => {
 					backgroundImage: backgroundImage,
 				}}
 			></div>
+
 			<div className="container">
 				<div className="row">
 					<div className="col-12 col-md-3">
@@ -64,28 +65,19 @@ export default ({ movie, data }) => {
 
 					<div className="col-12 col-md-9">
 						<h1>{movie.title}</h1>
-						<p className="offer-type sub-title">
-							{movie.object_type} / {movie.original_release_year}
-						</p>
-						<p className="offer-short-description">
-							{movie.short_description}
-						</p>
-						<h5 className="offer-cast-title">Cast</h5>
+
+						<h2 className="title-year">{movie.object_type} / {movie.original_release_year}</h2>
+						<p className="offer-short-description">{movie.short_description}</p>
+
+						<h2 className="title-cast">Cast</h2>
 						<div className="row d-flex">
-							{movie.credits.slice(0, 4).map((credit) => (
+							{movie.credits.slice(0, 5).map((credit) => (
 								<div
 									key={credit.person_id}
-									className="col-4"
-									style={{
-										width: "auto",
-										maxWidth: "230px",
-										marginRight: "3rem",
-									}}
+									className="col-12 col-md-4 actor"
 								>
 									<p className="actor-name">{credit.name}</p>
-									<p className="actor-character">
-										{credit.character_name}
-									</p>
+									<p className="actor-character">{credit.character_name}</p>
 								</div>
 							))}
 						</div>

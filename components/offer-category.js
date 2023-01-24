@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export default ({ title, offers }) => (
 	<article className="offers-category">
-		<h5 className="offers-category-title">{title}</h5>
+		<h3>{title}</h3>
 		{offers.map((offer) => (
 			<div
 				key={offer.id}
