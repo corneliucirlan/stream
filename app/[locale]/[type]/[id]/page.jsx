@@ -4,7 +4,7 @@ import MovieProvider from '../../../../components/movie-provider'
 import Backdrop from "../../../../components/backdrop"
 
 const MovieDetails = async ({ params }) => {
-	const { id, type, locale } = params;
+	const { id, type, locale } = params
 
 	const movie = await getMovieInfo(id, type, locale)
 	const data = await getMovieData(id, type)
@@ -59,7 +59,7 @@ const MovieDetails = async ({ params }) => {
 				</section>
 			</div>
 		</>
-	);
+	)
 }
 
 export default MovieDetails

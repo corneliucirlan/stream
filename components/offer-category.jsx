@@ -26,5 +26,5 @@ export default ({ title, offers }) => (
 			</div>
 		))}
 	</article>
-);
+)
 

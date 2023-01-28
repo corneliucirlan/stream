@@ -1,5 +1,5 @@
 // Global SASS
-import "../sass/style.sass";
+import "../sass/style.sass"
 
 export default ({ children }) => {
 	return (
@@ -7,5 +7,5 @@ export default ({ children }) => {
 			<head />
 			<body>{children}</body>
 		</html>
-	);
+	)
 }
