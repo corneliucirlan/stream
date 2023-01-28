@@ -4,8 +4,8 @@ import Image from "next/image"
 export default ({ id, title, type, poster, locale, releaseYear }) => (
 	<article className="col-6 col-md-2 card">
 		<Link
-			href={`/details?type=${type}&id=${id}&locale=${locale}`}
-			target="_blank"
+			href={`/${locale}/${type}/${id}`}
+			// target="_blank"
 		>
 			<Image src={poster} width="592" height="841" alt={title} />
 			<div className="card-background">

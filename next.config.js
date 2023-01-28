@@ -20,6 +20,9 @@ module.exports = () => {
 		},
 
 		// API Rewrites
-		rewrites
+		rewrites,
+
+		// App directory
+		experimental: { appDir: true }
 	}
 }

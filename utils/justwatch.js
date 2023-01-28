@@ -261,7 +261,7 @@ export const getMovieData = async (id, type) => {
 	let allProviders = await getAllProviders()
 
 	// Return movie data
-	return movieProviders.map(provider => {
+	let data = movieProviders.map(provider => {
 
 		// Get offers by monetization type
 		const getOffersByType = (providerOffers, monetization) => {
@@ -340,4 +340,8 @@ export const getMovieData = async (id, type) => {
 			),
 		}
 	})
+
+	// Filter out empty elements
+	return data.filter((result) => Object.entries(result.offers).length > 0);
+
 }
