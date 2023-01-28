@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-import MovieCard from "../components/movie-card"
+import MovieCard from "./movie-card"
 import {
 	API_IMAGES_URL,
 	DEFAULT_LOCALE,
