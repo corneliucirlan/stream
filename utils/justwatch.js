@@ -121,8 +121,8 @@ export const getMovieInfo = async (id, type, locale) => {
 			  )
 
 	// Get movie slug
-	const slug = movieInfo.full_path.split('/').pop()
-
+	const slug = movieInfo.full_path ? movieInfo.full_path.split("/").pop() : null
+	
 	// Return movie data
 	return {
 		title,
@@ -342,6 +342,6 @@ export const getMovieData = async (id, type) => {
 	})
 
 	// Filter out empty elements
-	return data.filter((result) => Object.entries(result.offers).length > 0);
+	return data.filter((result) => Object.entries(result.offers).length > 0)
 
 }

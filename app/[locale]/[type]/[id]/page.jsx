@@ -37,17 +37,20 @@ const MovieDetails = async ({ params }) => {
 
 						<h2 className="title-cast">Cast</h2>
 						<div className="row d-flex">
-							{movie.credits.slice(0, 5).map((credit) => (
-								<div
-									key={credit.person_id}
-									className="col-12 col-md-4 actor"
-								>
-									<p className="actor-name">{credit.name}</p>
-									<p className="actor-character">
-										{credit.character_name}
-									</p>
-								</div>
-							))}
+							{movie.credits &&
+								movie.credits.slice(0, 5).map((credit) => (
+									<div
+										key={credit.person_id}
+										className="col-12 col-md-4 actor"
+									>
+										<p className="actor-name">
+											{credit.name}
+										</p>
+										<p className="actor-character">
+											{credit.character_name}
+										</p>
+									</div>
+								))}
 						</div>
 					</div>
 				</div>
