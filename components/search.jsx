@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { useEffect, useState } from "react"
 
@@ -7,19 +7,19 @@ import {
 	API_IMAGES_URL,
 	DEFAULT_LOCALE,
 	getPhotoID,
-	searchQuery
+	searchQuery,
 } from "../utils/justwatch"
 
 export default ({ countries }) => {
-
+	
 	// Store search locale / country
-	let [ searchLocale, setSearchLocale ] = useState(DEFAULT_LOCALE)
+	let [searchLocale, setSearchLocale] = useState(DEFAULT_LOCALE)
 
 	// Store search box state
-	let [ searchInput, setSearchInput ] = useState("")
+	let [searchInput, setSearchInput] = useState("")
 
 	// Store search results
-	let [ searchResults, setSearchResults ] = useState([])
+	let [searchResults, setSearchResults] = useState([])
 
 	// Get the search results
 	useEffect(() => {
@@ -42,13 +42,13 @@ export default ({ countries }) => {
 
 				setSearchResults(items)
 			})
-	}, [ searchInput, searchLocale ])
+	}, [searchInput, searchLocale])
 
 	// Save search country
-	const handleLocaleChange = event => setSearchLocale(event.target.value)
+	const handleLocaleChange = (event) => setSearchLocale(event.target.value)
 
 	// Save search input
-	const handleSearchChange = event => setSearchInput(event.target.value)
+	const handleSearchChange = (event) => setSearchInput(event.target.value)
 
 	return (
 		<div className="container">

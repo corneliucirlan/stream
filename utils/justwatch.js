@@ -1,5 +1,5 @@
-const API_BASE_URL = "https://apis.justwatch.com"
-const HEADERS = {
+export const API_BASE_URL = "https://apis.justwatch.com"
+export const HEADERS = {
 	"Content-Type": "application/json",
 	"X-Requested-With": "fetch",
 }
@@ -67,7 +67,8 @@ export const getRandomBackdropID = ids =>
 export const searchQuery = async (query, locale) => {
 
 	// Fetch URL
-	const url = `/api/content/titles/${locale}/popular`
+	// const url = `/api/content/titles/${locale}/popular`;
+	const url = `${API_BASE_URL}/content/titles/${locale}/popular`;
 
 	// Fetch results
 	const response = await fetch(url, {
