@@ -1,10 +1,10 @@
-import Image from "next/image";
-import { getMovieInfo } from "../../../../utils/justwatch";
+import Image from "next/image"
+import { getMovieInfo } from "../../../../utils/justwatch"
 
 const MovieDetails = async ({ id, type, locale }) => {
 
 	// Get movie details
-	const movie = await getMovieInfo(id, type, locale);
+	const movie = await getMovieInfo(id, type, locale)
 
 	return (
 		<div className="row">
@@ -44,7 +44,7 @@ const MovieDetails = async ({ id, type, locale }) => {
 				</div>
 			</div>
 		</div>
-	);
+	)
 }
 
 export default MovieDetails

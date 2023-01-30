@@ -17,5 +17,5 @@ export default ({ id, title, type, poster, locale, releaseYear }) => {
 				</div>
 			</Link>
 		</article>
-	);
+	)
 }
