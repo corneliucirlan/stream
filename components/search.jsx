@@ -11,7 +11,10 @@ import {
 } from "../utils/justwatch"
 
 export default ({ countries }) => {
-	
+	const inputKey = "searchInput"
+	const localeKey = "searchLocale"
+	const resultsKey = "searchResults"
+
 	// Store search locale / country
 	let [searchLocale, setSearchLocale] = useState(DEFAULT_LOCALE)
 
@@ -19,11 +22,27 @@ export default ({ countries }) => {
 	let [searchInput, setSearchInput] = useState("")
 
 	// Store search results
-	let [searchResults, setSearchResults] = useState([])
+	let [searchResults, setSearchResults] = useState(null)
+
+	// Check session storage
+	useEffect(() => {
+		// Update search input if available
+		const searchInput = sessionStorage.getItem(inputKey)
+		searchInput && setSearchInput(searchInput)
+
+		// Update search locale if available
+		const searchLocale = sessionStorage.getItem(localeKey)
+		searchLocale && setSearchLocale(searchLocale)
+
+		// Update search results if available
+		const searchresults = sessionStorage.getItem(resultsKey)
+		searchresults &&
+			searchInput &&
+			setSearchResults(JSON.parse(searchresults))
+	}, [])
 
 	// Get the search results
 	useEffect(() => {
-
 		// Search Movie or TV Show
 		searchInput &&
 			searchQuery(searchInput, searchLocale).then((response) => {
@@ -40,15 +59,40 @@ export default ({ countries }) => {
 					}
 				})
 
+				// Update search results state
 				setSearchResults(items)
+
+				// Update session storage search results
+				sessionStorage.getItem(inputKey) &&
+					sessionStorage.setItem(resultsKey, JSON.stringify(items))
 			})
 	}, [searchInput, searchLocale])
 
 	// Save search country
-	const handleLocaleChange = (event) => setSearchLocale(event.target.value)
+	const handleLocaleChange = (event) => {
+		// Update search locale state
+		setSearchLocale(event.target.value)
+
+		// Update session storage search locale
+		sessionStorage.setItem(localeKey, event.target.value.toString())
+	}
 
 	// Save search input
-	const handleSearchChange = (event) => setSearchInput(event.target.value)
+	const handleSearchChange = (event) => {
+		// Get input value
+		const value = event.target.value
+
+		// Update search & result
+		if (value === "") {
+			sessionStorage.removeItem(inputKey)
+			sessionStorage.removeItem(resultsKey)
+			setSearchInput("")
+			setSearchResults(null)
+		} else {
+			setSearchInput(event.target.value)
+			sessionStorage.setItem(inputKey, event.target.value.toString())
+		}
+	}
 
 	return (
 		<div className="container">
