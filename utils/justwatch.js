@@ -1,7 +1,7 @@
 export const API_BASE_URL = "https://apis.justwatch.com"
 export const HEADERS = {
 	"Content-Type": "application/json",
-	"X-Requested-With": "fetch",
+	"X-Requested-With": "fetch"
 }
 export const API_IMAGES_URL = "https://images.justwatch.com"
 export const DEFAULT_LOCALE = "en_US"
@@ -11,9 +11,9 @@ export const DEFAULT_LOCALE = "en_US"
  * @returns {Object} - An object containing the data for all countries
  */
 export const getAllCountries = async () => {
-	return (await (await fetch(`${API_BASE_URL}/content/locales/state`))
-		.json())
-		.sort((a, b) => (a.country > b.country ? 1 : -1))
+	return (
+		await (await fetch(`${API_BASE_URL}/content/locales/state`)).json()
+	).sort((a, b) => (a.country > b.country ? 1 : -1))
 }
 
 /**
@@ -21,16 +21,15 @@ export const getAllCountries = async () => {
  * @returns {String} Background image URL
  */
 export const getHomepageBackdrop = async () => {
-
 	// Get the most popular movies and shows
 	let response = await fetch(
 		`${API_BASE_URL}/content/titles/${DEFAULT_LOCALE}/popular`,
 		{
 			method: "POST",
 			body: JSON.stringify({
-				content_types: ["movie", "show"],
+				content_types: ["movie", "show"]
 			}),
-			headers: HEADERS,
+			headers: HEADERS
 		}
 	)
 
@@ -55,7 +54,7 @@ export const getHomepageBackdrop = async () => {
  * @param {Array} ids Array of ids to choose from
  * @returns {String} Randomly generated backdrop id
  */
-export const getRandomBackdropID = ids =>
+export const getRandomBackdropID = (ids) =>
 	ids !== null ? ids[Math.floor(Math.random() * ids.length)] : null
 
 /**
@@ -65,7 +64,6 @@ export const getRandomBackdropID = ids =>
  * @returns {Object} - An object containing the search results
  */
 export const searchQuery = async (query, locale) => {
-
 	// Fetch URL
 	// const url = `${API_BASE_URL}/content/titles/${locale}/popular`
 	const url = `/api/content/titles/${locale}/popular`
@@ -74,9 +72,9 @@ export const searchQuery = async (query, locale) => {
 	const response = await fetch(url, {
 		method: "POST",
 		body: JSON.stringify({
-			query: query,
+			query: query
 		}),
-		headers: HEADERS,
+		headers: HEADERS
 	})
 
 	// Return results as JSON object
@@ -91,7 +89,6 @@ export const searchQuery = async (query, locale) => {
  * @returns {Object} - An object containing the movie information
  */
 export const getMovieInfo = async (id, type, locale) => {
-	
 	// Fetch URL
 	const url = `${API_BASE_URL}/content/titles/${type}/${id}/locale/${locale}`
 
@@ -106,13 +103,13 @@ export const getMovieInfo = async (id, type, locale) => {
 		object_type,
 		original_release_year,
 		short_description,
-		credits,
+		credits
 	} = movieInfo
 
 	// Update movie poster
 	const posterId = getPhotoID(poster)
 	poster = `${API_IMAGES_URL}/poster/${posterId}/s592/poster.webp`
-	
+
 	// Get movie backdrops IDs
 	const backdrops =
 		movieInfo.backdrops === undefined
@@ -122,8 +119,10 @@ export const getMovieInfo = async (id, type, locale) => {
 			  )
 
 	// Get movie slug
-	const slug = movieInfo.full_path ? movieInfo.full_path.split("/").pop() : null
-	
+	const slug = movieInfo.full_path
+		? movieInfo.full_path.split("/").pop()
+		: null
+
 	// Return movie data
 	return {
 		title,
@@ -133,7 +132,7 @@ export const getMovieInfo = async (id, type, locale) => {
 		object_type,
 		original_release_year,
 		short_description,
-		credits,
+		credits
 	}
 }
 
@@ -144,14 +143,12 @@ export const getMovieInfo = async (id, type, locale) => {
  * @returns {Object[]} - An array of objects containing the providers data for the movie
  */
 export const getMovieProviders = async (id, type) => {
-	
 	// Get all available countries
 	const countries = await getAllCountries()
 
 	// Loop through all countries
 	let whereToStream = await Promise.all(
 		countries.map(async (country) => {
-
 			// Create movie/tv show URL for specific country
 			const url = `${API_BASE_URL}/content/titles/${type}/${id}/locale/${country.full_locale}`
 
@@ -168,7 +165,7 @@ export const getMovieProviders = async (id, type) => {
 			return {
 				name: country.country,
 				// full_locale: country.full_locale,
-				offers: stream.offers,
+				offers: stream.offers
 			}
 		})
 	)
@@ -185,14 +182,14 @@ export const getMovieProviders = async (id, type) => {
 				return {
 					provider_id,
 					monetization_type,
-					presentation_type,
+					presentation_type
 				}
 			}
 		)
 
 		return {
 			name: provider.name,
-			offers: offers,
+			offers: offers
 		}
 	})
 
@@ -204,7 +201,6 @@ export const getMovieProviders = async (id, type) => {
  * @returns {Object} - An object containing the data for all providers
  */
 export const getAllProviders = async () => {
-
 	// Get all countries
 	const countries = await getAllCountries()
 
@@ -223,7 +219,7 @@ export const getAllProviders = async () => {
 		if (!acc[provider.id]) {
 			acc[provider.id] = {
 				clear_name: provider.clear_name,
-				icon_url: provider.icon_url,
+				icon_url: provider.icon_url
 			}
 		}
 		return acc
@@ -236,7 +232,6 @@ export const getAllProviders = async () => {
  * @returns {string|null} - The photo id, or null if not found
  */
 export const getPhotoID = (poster) => {
-
 	// Regular expression to match photo id
 	const photoRegex = /\s*([0-9]+)/
 
@@ -254,7 +249,6 @@ export const getPhotoID = (poster) => {
  * @returns {Object[]} - An array of objects containing the movie data for each country
  */
 export const getMovieData = async (id, type) => {
-	
 	// Get movie providers
 	let movieProviders = await getMovieProviders(id, type)
 
@@ -262,11 +256,9 @@ export const getMovieData = async (id, type) => {
 	let allProviders = await getAllProviders()
 
 	// Return movie data
-	let data = movieProviders.map(provider => {
-
+	let data = movieProviders.map((provider) => {
 		// Get offers by monetization type
 		const getOffersByType = (providerOffers, monetization) => {
-
 			// Filter and map offers in a single step
 			let offers = providerOffers
 				.filter((offer) => offer.monetization_type === monetization)
@@ -274,7 +266,7 @@ export const getMovieData = async (id, type) => {
 					({
 						provider_id,
 						presentation_type,
-						monetization_type,
+						monetization_type
 					}) => ({
 						id: provider_id,
 						name:
@@ -287,7 +279,7 @@ export const getMovieData = async (id, type) => {
 								  )}/s100`
 								: null,
 						resolution: presentation_type,
-						type: monetization_type,
+						type: monetization_type
 					})
 				)
 
@@ -304,7 +296,7 @@ export const getMovieData = async (id, type) => {
 							name,
 							icon,
 							resolutions: [],
-							type,
+							type
 						}
 					}
 
@@ -338,11 +330,10 @@ export const getMovieData = async (id, type) => {
 					return acc
 				},
 				{}
-			),
+			)
 		}
 	})
 
 	// Filter out empty elements
 	return data.filter((result) => Object.entries(result.offers).length > 0)
-
 }

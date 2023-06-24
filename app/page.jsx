@@ -1,11 +1,10 @@
 // Get background image
-import { getAllCountries, getHomepageBackdrop } from '../utils/justwatch'
+import { getAllCountries, getHomepageBackdrop } from "../utils/justwatch"
 
 // Search
-import Search from '../components/search'
+import Search from "../components/search"
 
 const Page = async () => {
-
 	const countries = await getAllCountries()
 	const backgroundImageURL = await getHomepageBackdrop()
 
@@ -14,7 +13,7 @@ const Page = async () => {
 			<div
 				className="bg-image bg-image-frontpage"
 				style={{
-					backgroundImage: `url(${backgroundImageURL}`,
+					backgroundImage: `url(${backgroundImageURL}`
 				}}
 			/>
 
