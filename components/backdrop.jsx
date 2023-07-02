@@ -5,7 +5,9 @@ export default ({ id, slug }) => {
 		<div
 			className="bg-image"
 			style={{
-				backgroundImage: `url(${API_IMAGES_URL}/backdrop/${getRandomBackdropID(id)}/s1920/${slug})`,
+				backgroundImage: `url(${API_IMAGES_URL}/backdrop/${getRandomBackdropID(
+					id
+				)}/s1920/${slug})`,
 			}}
 		/>
 	)

@@ -1,8 +1,7 @@
 import Image from "next/image"
-import { getMovieInfo } from "../../../../utils/justwatch"
+import { getMovieInfo } from "../../utils/justwatch"
 
 const MovieDetails = async ({ id, type, locale }) => {
-
 	// Get movie details
 	const movie = await getMovieInfo(id, type, locale)
 
@@ -30,7 +29,7 @@ const MovieDetails = async ({ id, type, locale }) => {
 				<h2 className="title-cast">Cast</h2>
 				<div className="row d-flex">
 					{movie.credits &&
-						movie.credits.slice(0, 5).map((credit) => (
+						movie.credits.slice(0, 5).map(credit => (
 							<div
 								key={credit.person_id}
 								className="col-12 col-md-4 actor"

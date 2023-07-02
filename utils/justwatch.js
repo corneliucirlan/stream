@@ -1,7 +1,7 @@
 export const API_BASE_URL = "https://apis.justwatch.com"
 export const HEADERS = {
 	"Content-Type": "application/json",
-	"X-Requested-With": "fetch"
+	"X-Requested-With": "fetch",
 }
 export const API_IMAGES_URL = "https://images.justwatch.com"
 export const DEFAULT_LOCALE = "en_US"
@@ -18,7 +18,7 @@ export const getAllCountries = async () => {
 
 /**
  * Get a background image for the homepage from the most popular movie/show
- * @returns {String} Background image URL
+ * @returns {Array} Background ids and slug
  */
 export const getHomepageBackdrop = async () => {
 	// Get the most popular movies and shows
@@ -27,9 +27,9 @@ export const getHomepageBackdrop = async () => {
 		{
 			method: "POST",
 			body: JSON.stringify({
-				content_types: ["movie", "show"]
+				content_types: ["movie", "show"],
 			}),
-			headers: HEADERS
+			headers: HEADERS,
 		}
 	)
 
@@ -43,10 +43,8 @@ export const getHomepageBackdrop = async () => {
 		DEFAULT_LOCALE
 	)
 
-	// Return a backdrop URL
-	return `${API_IMAGES_URL}/backdrop/${getRandomBackdropID(
-		movieInfo.backdrops
-	)}/s1920/${movieInfo.slug}`
+	// Return background ids and slug
+	return [movieInfo.backdrops, movieInfo.slug]
 }
 
 /**
@@ -54,7 +52,7 @@ export const getHomepageBackdrop = async () => {
  * @param {Array} ids Array of ids to choose from
  * @returns {String} Randomly generated backdrop id
  */
-export const getRandomBackdropID = (ids) =>
+export const getRandomBackdropID = ids =>
 	ids !== null ? ids[Math.floor(Math.random() * ids.length)] : null
 
 /**
@@ -63,7 +61,7 @@ export const getRandomBackdropID = (ids) =>
  * @param {string} locale - The locale of the search query (e.g. "en_US", "fr_FR")
  * @returns {Object} - An object containing the search results
  */
-export const searchQuery = async (query, locale) => {
+export const fetchData = async (query, locale, signal) => {
 	// Fetch URL
 	// const url = `${API_BASE_URL}/content/titles/${locale}/popular`
 	const url = `/api/content/titles/${locale}/popular`
@@ -72,9 +70,10 @@ export const searchQuery = async (query, locale) => {
 	const response = await fetch(url, {
 		method: "POST",
 		body: JSON.stringify({
-			query: query
+			query: query,
 		}),
-		headers: HEADERS
+		headers: HEADERS,
+		signal: signal,
 	})
 
 	// Return results as JSON object
@@ -103,7 +102,7 @@ export const getMovieInfo = async (id, type, locale) => {
 		object_type,
 		original_release_year,
 		short_description,
-		credits
+		credits,
 	} = movieInfo
 
 	// Update movie poster
@@ -114,7 +113,7 @@ export const getMovieInfo = async (id, type, locale) => {
 	const backdrops =
 		movieInfo.backdrops === undefined
 			? null
-			: movieInfo.backdrops.map((backdrop) =>
+			: movieInfo.backdrops.map(backdrop =>
 					getPhotoID(backdrop.backdrop_url)
 			  )
 
@@ -132,7 +131,7 @@ export const getMovieInfo = async (id, type, locale) => {
 		object_type,
 		original_release_year,
 		short_description,
-		credits
+		credits,
 	}
 }
 
@@ -148,7 +147,7 @@ export const getMovieProviders = async (id, type) => {
 
 	// Loop through all countries
 	let whereToStream = await Promise.all(
-		countries.map(async (country) => {
+		countries.map(async country => {
 			// Create movie/tv show URL for specific country
 			const url = `${API_BASE_URL}/content/titles/${type}/${id}/locale/${country.full_locale}`
 
@@ -165,7 +164,7 @@ export const getMovieProviders = async (id, type) => {
 			return {
 				name: country.country,
 				// full_locale: country.full_locale,
-				offers: stream.offers
+				offers: stream.offers,
 			}
 		})
 	)
@@ -176,20 +175,20 @@ export const getMovieProviders = async (id, type) => {
 		.sort((a, b) => (a.name > b.name ? 1 : -1))
 
 	// Reformat the provider data and return a new array
-	let revizedMovieProviders = filteredAndSorted.map((provider) => {
+	let revizedMovieProviders = filteredAndSorted.map(provider => {
 		let offers = provider.offers.map(
 			({ provider_id, monetization_type, presentation_type }) => {
 				return {
 					provider_id,
 					monetization_type,
-					presentation_type
+					presentation_type,
 				}
 			}
 		)
 
 		return {
 			name: provider.name,
-			offers: offers
+			offers: offers,
 		}
 	})
 
@@ -206,7 +205,7 @@ export const getAllProviders = async () => {
 
 	// Fetch providers data for each country and wait for all responses
 	const providers = await Promise.all(
-		countries.map(async (country) => {
+		countries.map(async country => {
 			const response = await fetch(
 				`${API_BASE_URL}/content/providers/locale/${country.full_locale}`
 			)
@@ -219,7 +218,7 @@ export const getAllProviders = async () => {
 		if (!acc[provider.id]) {
 			acc[provider.id] = {
 				clear_name: provider.clear_name,
-				icon_url: provider.icon_url
+				icon_url: provider.icon_url,
 			}
 		}
 		return acc
@@ -231,7 +230,7 @@ export const getAllProviders = async () => {
  * @param {string} poster - The poster string to extract the photo id from
  * @returns {string|null} - The photo id, or null if not found
  */
-export const getPhotoID = (poster) => {
+export const getPhotoID = poster => {
 	// Regular expression to match photo id
 	const photoRegex = /\s*([0-9]+)/
 
@@ -256,17 +255,17 @@ export const getMovieData = async (id, type) => {
 	let allProviders = await getAllProviders()
 
 	// Return movie data
-	let data = movieProviders.map((provider) => {
+	let data = movieProviders.map(provider => {
 		// Get offers by monetization type
 		const getOffersByType = (providerOffers, monetization) => {
 			// Filter and map offers in a single step
 			let offers = providerOffers
-				.filter((offer) => offer.monetization_type === monetization)
+				.filter(offer => offer.monetization_type === monetization)
 				.map(
 					({
 						provider_id,
 						presentation_type,
-						monetization_type
+						monetization_type,
 					}) => ({
 						id: provider_id,
 						name:
@@ -279,7 +278,7 @@ export const getMovieData = async (id, type) => {
 								  )}/s100`
 								: null,
 						resolution: presentation_type,
-						type: monetization_type
+						type: monetization_type,
 					})
 				)
 
@@ -296,7 +295,7 @@ export const getMovieData = async (id, type) => {
 							name,
 							icon,
 							resolutions: [],
-							type
+							type,
 						}
 					}
 
@@ -330,10 +329,31 @@ export const getMovieData = async (id, type) => {
 					return acc
 				},
 				{}
-			)
+			),
 		}
 	})
 
 	// Filter out empty elements
-	return data.filter((result) => Object.entries(result.offers).length > 0)
+	return data.filter(result => Object.entries(result.offers).length > 0)
+}
+
+/**
+ * Transforms search results data by mapping each item to a new format.
+ *
+ * @param {Object} data - The search results data.
+ * @returns {Array} - An array of transformed search results.
+ */
+export const mapResults = data => {
+	return data.items.map(item => {
+		return {
+			id: item.id,
+			title: item.title,
+			poster: `${API_IMAGES_URL}/poster/${getPhotoID(
+				item.poster
+			)}/s592/poster.webp`,
+			posterBlurHash: item.poster_blur_hash,
+			type: item.object_type,
+			releaseYear: item.original_release_year,
+		}
+	})
 }

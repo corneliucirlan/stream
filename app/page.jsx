@@ -1,25 +1,19 @@
 // Get background image
 import { getAllCountries, getHomepageBackdrop } from "../utils/justwatch"
+import Backdrop from "../components/backdrop"
 
 // Search
-import Search from "../components/search"
+import Search from "./search"
 
-const Page = async () => {
+export default async () => {
 	const countries = await getAllCountries()
-	const backgroundImageURL = await getHomepageBackdrop()
+	const [ids, slug] = await getHomepageBackdrop()
 
 	return (
 		<>
-			<div
-				className="bg-image bg-image-frontpage"
-				style={{
-					backgroundImage: `url(${backgroundImageURL}`
-				}}
-			/>
+			<Backdrop id={ids} slug={slug} />
 
 			<Search countries={countries} />
 		</>
 	)
 }
-
-export default Page
