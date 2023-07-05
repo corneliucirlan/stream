@@ -3,7 +3,7 @@ import Backdrop from "../../components/backdrop"
 import MovieDetails from "./movie-details"
 import Offers from "./offers/offers"
 
-const MoviePage = async ({ params }) => {
+export default async ({ params }) => {
 	const [locale, type, id] = params.details
 
 	const movie = await getMovieInfo(id, type, locale)
@@ -19,5 +19,3 @@ const MoviePage = async ({ params }) => {
 		</>
 	)
 }
-
-export default MoviePage

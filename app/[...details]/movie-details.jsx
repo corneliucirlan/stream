@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { getMovieInfo } from "../../utils/justwatch"
 
-const MovieDetails = async ({ id, type, locale }) => {
+export default async ({ id, type, locale }) => {
 	// Get movie details
 	const movie = await getMovieInfo(id, type, locale)
 
@@ -28,22 +28,19 @@ const MovieDetails = async ({ id, type, locale }) => {
 
 				<h2 className="title-cast">Cast</h2>
 				<div className="row d-flex">
-					{movie.credits &&
-						movie.credits.slice(0, 5).map(credit => (
-							<div
-								key={credit.person_id}
-								className="col-12 col-md-4 actor"
-							>
-								<p className="actor-name">{credit.name}</p>
-								<p className="actor-character">
-									{credit.character_name}
-								</p>
-							</div>
-						))}
+					{movie?.credits?.slice(0, 5).map(credit => (
+						<div
+							key={credit.person_id}
+							className="col-12 col-md-4 actor"
+						>
+							<p className="actor-name">{credit.name}</p>
+							<p className="actor-character">
+								{credit.character_name}
+							</p>
+						</div>
+					))}
 				</div>
 			</div>
 		</div>
 	)
 }
-
-export default MovieDetails

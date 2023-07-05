@@ -17,15 +17,14 @@ export default ({ countries }) => {
 				className="form-control"
 				onChange={handleChange}
 			>
-				{countries !== null &&
-					countries.map(country => (
-						<option
-							key={country.exposed_url_part}
-							value={country.full_locale}
-						>
-							{country.country}
-						</option>
-					))}
+				{countries?.map(country => (
+					<option
+						key={country.exposed_url_part}
+						value={country.full_locale}
+					>
+						{country.country}
+					</option>
+				))}
 			</select>
 		</div>
 	)

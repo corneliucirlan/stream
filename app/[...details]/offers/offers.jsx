@@ -6,7 +6,7 @@ export default async ({ id, type }) => {
 
 	return (
 		<section className="row offers-available">
-			{allOffers.map(offer => (
+			{allOffers?.map(offer => (
 				<Country
 					key={offer.country}
 					name={offer.country}
