@@ -1,15 +1,16 @@
 import Image from "next/image"
+import { Item } from "../../../utils/interface/offers"
 
-export default ({ logoURL, name, resolutions }) => {
+export default ({ icon, providerName, resolutions }: Item) => {
 	return (
 		<div className="stream-item d-inline-flex flex-column align-items-center justify-content-center">
 			<div className="stream-logo">
-				{logoURL && (
+				{icon && (
 					<Image
-						src={logoURL}
+						src={icon}
 						width="50"
 						height="50"
-						alt={name}
+						alt={providerName}
 						style={{
 							width: "50px",
 							height: "50px",
@@ -18,7 +19,7 @@ export default ({ logoURL, name, resolutions }) => {
 					/>
 				)}
 			</div>
-			{name && <p className="stream-name">{name}</p>}
+			{providerName && <p className="stream-name">{providerName}</p>}
 			{resolutions && (
 				<p className="stream-resolutions">{resolutions.join(" / ")}</p>
 			)}

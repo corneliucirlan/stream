@@ -137,7 +137,7 @@ export const getMovieInfo = async (id, type, locale) => {
 
 /**
  * Fetches and returns the providers data for a given movie id and type
- * @param {string} id - The id of the movie
+ * @param {number} id - The id of the movie
  * @param {string} type - The type of movie (e.g. "movie", "show")
  * @returns {Object[]} - An array of objects containing the providers data for the movie
  */
@@ -170,6 +170,7 @@ export const getMovieProviders = async (id, type) => {
 	)
 
 	// Fiter out null values and sort by name
+	console.log("where to stream: ", whereToStream.filter(Boolean))
 	let filteredAndSorted = whereToStream
 		.filter(Boolean)
 		.sort((a, b) => (a.name > b.name ? 1 : -1))
@@ -268,7 +269,7 @@ export const getMovieData = async (id, type) => {
 						monetization_type,
 					}) => ({
 						id: provider_id,
-						name:
+						providerName:
 							typeof allProviders[provider_id] !== "undefined" &&
 							allProviders[provider_id].clear_name,
 						icon:
@@ -284,15 +285,15 @@ export const getMovieData = async (id, type) => {
 
 			// Group offers by id and name
 			const groupedOffers = offers.reduce(
-				(groups, { id, name, icon, resolution, type }) => {
+				(groups, { id, providerName, icon, resolution, type }) => {
 					// Create a group key from id and name
-					const groupKey = `${id}-${name}`
+					const groupKey = `${id}-${providerName}`
 
 					// If group does not exist, create it with the offer properties
 					if (!groups[groupKey]) {
 						groups[groupKey] = {
 							id,
-							name,
+							providerName,
 							icon,
 							resolutions: [],
 							type,
@@ -320,9 +321,10 @@ export const getMovieData = async (id, type) => {
 		let buy = getOffersByType(provider.offers, "buy")
 
 		return {
-			country: provider.name,
+			countryName: provider.name,
 			offers: Object.entries({ flatrate, rent, buy }).reduce(
 				(acc, [key, value]) => {
+					console.log("ACC: ", acc)
 					if (value !== null) {
 						acc[key] = value
 					}

@@ -4,10 +4,11 @@ import { QUERY_KEY } from "./storage"
 import { useSessionStorage } from "usehooks-ts"
 
 export default () => {
-	const [query, setQuery] = useSessionStorage(QUERY_KEY, null)
+	const [query, setQuery] = useSessionStorage<string>(QUERY_KEY, "")
 
 	// Update session storage
-	const handleChange = event => setQuery(event.target.value)
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+		setQuery(event.target.value)
 
 	return (
 		<div className="col-12 col-md-4">

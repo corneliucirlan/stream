@@ -4,7 +4,16 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
 
-export default ({ id, title, type, poster, locale, releaseYear }) => {
+import SearchResult from "../../utils/interface/search-result"
+
+export default ({
+	id,
+	title,
+	type,
+	poster,
+	locale,
+	releaseYear,
+}: SearchResult) => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	return (
