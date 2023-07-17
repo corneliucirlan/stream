@@ -1,36 +1,39 @@
 import Category from "./category"
-import { Item, Offer } from "../../../utils/interface/offers"
+import { OfferType } from "../../../utils/interface/offers"
 
-// interface Offers {
-// 	providerName: string
-// 	offers: {
-// 		[key: string]: Array<Item>
-// 	}
-// }
-
-export default ({ countryName, offers }: Offer) => {
+export default ({
+	countryName,
+	offers
+}: {
+	countryName: string
+	offers: OfferType[]
+}) => {
 	const categories: Array<string> = ["flatrate", "rent", "buy"]
-	console.log(offers)
+
 	return (
 		<div className="col-12 stream-country">
 			<div className="offers-country">
 				<h2 className="title-country">{countryName}</h2>
-				{categories?.map(
-					(category: string) =>
-						category in offers && (
-							<Category
-								key={category}
-								providerName={
-									category === "flatrate"
-										? "Stream"
-										: category === "rent"
-										? "Rent"
-										: "Buy"
-								}
-								offers={offers[category]}
-							/>
-						)
-				)}
+				{offers.map((offer: OfferType, index: number) => (
+					<div key={index}>
+						{categories.map(
+							(category: string) =>
+								category in offer && (
+									<Category
+										key={category}
+										offerType={
+											category === "flatrate"
+												? "Stream"
+												: category === "rent"
+												? "Rent"
+												: "Buy"
+										}
+										offers={offer[category]}
+									/>
+								)
+						)}
+					</div>
+				))}
 			</div>
 		</div>
 	)

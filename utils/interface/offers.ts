@@ -1,22 +1,16 @@
-export interface Item {
-	icon: string
+export interface OfferItem {
+	id?: number
 	providerName: string
+	icon: string | null
 	resolutions: Array<string>
+	type?: string
+}
+
+export interface OfferType {
+	[key: string]: OfferItem[]
 }
 
 export interface Offer {
-	offerType: string
-	offers: Array<Item>
-	// offers: {
-	// 	[key: string]: Array<Item>
-	// }
-}
-
-export interface AllOffers {
 	countryName: string
-	offers: {
-		flatrate?: Offer
-		rent?: Offer
-		buy?: Offer
-	}
+	offers: OfferType[]
 }

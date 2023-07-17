@@ -1,4 +1,4 @@
-import { HEADERS } from "./justwatch"
+import { HEADERS } from "./js-old"
 
 export default async <TResponse>(
 	query: string,

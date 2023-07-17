@@ -1,9 +1,17 @@
 import Image from "next/image"
-import { getMovieInfo } from "../../utils/justwatch"
+import { getMovieDetails } from "../../utils/justwatch"
 
-export default async ({ id, type, locale }) => {
+export default async ({
+	id,
+	type,
+	locale
+}: {
+	id: number
+	type: string
+	locale: string
+}) => {
 	// Get movie details
-	const movie = await getMovieInfo(id, type, locale)
+	const movie = await getMovieDetails(id, type, locale)
 
 	return (
 		<div className="row">

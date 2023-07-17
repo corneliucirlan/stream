@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useSessionStorage } from "usehooks-ts"
-import { DEFAULT_LOCALE, fetchData, mapResults } from "../utils/justwatch"
-import { QUERY_KEY, LOCALE_KEY, RESULTS_KEY } from "./search/storage"
+import { DEFAULT_LOCALE, mapResults } from "../utils/justwatch"
+import { QUERY_KEY, LOCALE_KEY } from "./search/storage"
 
 import CountryComponent from "./search/country"
 import Query from "./search/query"

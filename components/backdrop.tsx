@@ -1,18 +1,12 @@
-import { API_IMAGES_URL, getRandomBackdropID } from "../utils/justwatch"
+import { API_IMAGES_URL } from "../utils/justwatch"
+import BackdropData from "../utils/interface/backdrop"
 
-interface BGData {
-	id: Array<number>,
-	slug: string
-}
-
-export default ({ id, slug }: BGData) => {
+export default ({ id, slug }: BackdropData) => {
 	return (
 		<div
 			className="bg-image"
 			style={{
-				backgroundImage: `url(${API_IMAGES_URL}/backdrop/${getRandomBackdropID(
-					id
-				)}/s1920/${slug})`,
+				backgroundImage: `url(${API_IMAGES_URL}/backdrop/${id}/s1920/${slug})`,
 			}}
 		/>
 	)

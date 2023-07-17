@@ -1,7 +1,7 @@
 import Image from "next/image"
-import { Item } from "../../../utils/interface/offers"
+import { OfferItem } from "../../../utils/interface/offers"
 
-export default ({ icon, providerName, resolutions }: Item) => {
+export default ({ icon, providerName, resolutions }: OfferItem) => {
 	return (
 		<div className="stream-item d-inline-flex flex-column align-items-center justify-content-center">
 			<div className="stream-logo">
@@ -14,7 +14,7 @@ export default ({ icon, providerName, resolutions }: Item) => {
 						style={{
 							width: "50px",
 							height: "50px",
-							borderRadius: "25%",
+							borderRadius: "25%"
 						}}
 					/>
 				)}

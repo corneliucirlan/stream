@@ -1,13 +1,19 @@
 import ItemComponent from "./item"
-import { Item, Offer } from "../../../utils/interface/offers"
+import { OfferItem } from "../../../utils/interface/offers"
 
-export default ({ offerType, offers }: Offer) => {
+export default ({
+	offerType,
+	offers
+}: {
+	offerType: string
+	offers: OfferItem[]
+}) => {
 	return (
 		<article className="stream-category">
 			<h3>{offerType}</h3>
-			{offers?.map((offer: Item) => (
+			{offers?.map((offer: OfferItem) => (
 				<ItemComponent
-					key={offer.providerName}
+					key={offer.id}
 					icon={offer.icon}
 					providerName={offer.providerName}
 					resolutions={offer.resolutions}

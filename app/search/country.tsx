@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useSessionStorage } from "usehooks-ts"
-import { DEFAULT_LOCALE, API_BASE_URL } from "../../utils/justwatch"
+import { DEFAULT_LOCALE, API_BASE_URL } from "../../utils/js-old"
 import { LOCALE_KEY } from "./storage"
 
 import Country from "../../utils/interface/country"
