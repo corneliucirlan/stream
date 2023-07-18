@@ -1,4 +1,4 @@
-import { HEADERS } from "./js-old"
+import { HEADERS } from "./justwatch"
 
 export default async <TResponse>(
 	query: string,
@@ -11,10 +11,10 @@ export default async <TResponse>(
 	const response = await fetch(url, {
 		method: "POST",
 		body: JSON.stringify({
-			query: query,
+			query: query
 		}),
 		headers: HEADERS,
-		signal: controller.signal,
+		signal: controller.signal
 	})
 
 	// Return results as JSON object

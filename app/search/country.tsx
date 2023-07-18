@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useSessionStorage } from "usehooks-ts"
-import { DEFAULT_LOCALE, API_BASE_URL } from "../../utils/js-old"
+import { DEFAULT_LOCALE, API_BASE_URL } from "../../utils/justwatch"
 import { LOCALE_KEY } from "./storage"
 
 import Country from "../../utils/interface/country"
@@ -10,7 +10,7 @@ import Country from "../../utils/interface/country"
 const fetchCountries = async () => {
 	return (
 		await (await fetch(`${API_BASE_URL}/content/locales/state`)).json()
-	).sort((a, b) => (a.country > b.country ? 1 : -1))
+	).sort((a: Country, b: Country) => (a.country > b.country ? 1 : -1))
 }
 
 export default () => {
