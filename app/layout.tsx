@@ -1,7 +1,7 @@
 // Global SASS
 import "../sass/style.sass"
 
-export default ({ children }) => {
+export default ({ children }: { children: React.ReactNode }) => {
 	return (
 		<html>
 			<head />
