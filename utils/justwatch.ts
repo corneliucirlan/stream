@@ -303,6 +303,11 @@ export const getMovieDetails = async (
 			getPhotoID(backdrop.backdrop_url)
 	)
 
+	// Get IMDB ID
+	const imdb = movieDetails.external_ids.filter(
+		id => id.provider === "imdb"
+	)[0].external_id
+
 	// Get movie slug
 	const slug = movieDetails.full_path
 		? movieDetails.full_path.split("/").pop()
@@ -317,7 +322,8 @@ export const getMovieDetails = async (
 		object_type,
 		original_release_year,
 		short_description,
-		credits
+		credits,
+		imdb
 	}
 }
 

@@ -27,4 +27,5 @@ export interface MovieDetails {
 		name: string
 		character_name: string
 	}>
+	imdb: string
 }
