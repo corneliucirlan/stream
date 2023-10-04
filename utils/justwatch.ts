@@ -6,7 +6,8 @@ import {
 	StreamProvider,
 	SingleOfferForMovie,
 	MovieDetails,
-	OffersForMovie
+	OffersForMovie,
+	ProviderID
 } from "./interface/jw"
 
 export const API_BASE_URL = "https://apis.justwatch.com"
@@ -304,8 +305,8 @@ export const getMovieDetails = async (
 	)
 
 	// Get IMDB ID
-	const imdb = movieDetails.external_ids.filter(
-		id => id.provider === "imdb"
+	const imdb: string = movieDetails.external_ids.filter(
+		(id: ProviderID) => id.provider === "imdb"
 	)[0].external_id
 
 	// Get movie slug

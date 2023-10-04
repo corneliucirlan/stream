@@ -29,3 +29,8 @@ export interface MovieDetails {
 	}>
 	imdb: string
 }
+
+export interface ProviderID {
+	provider: string
+	external_id: string
+}

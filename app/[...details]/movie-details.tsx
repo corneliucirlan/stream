@@ -2,7 +2,10 @@ import Image from "next/image"
 import { getMovieDetails } from "../../utils/justwatch"
 import Link from "next/link"
 
-const getTraktUrl = async (imdbId: string, type: string) => {
+const getTraktUrl = async (
+	imdbId: string,
+	type: string
+): Promise<URL | null> => {
 	const BASE_URL = "https://api.trakt.tv"
 	const headers = new Headers({
 		"Content-Type": "application/json",
@@ -25,7 +28,7 @@ const getTraktUrl = async (imdbId: string, type: string) => {
 	const slug = type === "show" ? result.show.ids.slug : result.movie.ids.slug
 
 	// Construct the Trakt.tv URL
-	const traktUrl = `https://trakt.tv/${type}s/${slug}`
+	const traktUrl: URL = new URL(`https://trakt.tv/${type}s/${slug}`)
 
 	return traktUrl
 }
@@ -58,7 +61,7 @@ export default async ({
 
 			<div className="col-12 col-md-9">
 				<Link
-					href={traktURL}
+					href={traktURL ? traktURL : "#"}
 					target="_blank"
 					title={`Open Trakt.tv page for "${movie.title}"`}
 				>
