@@ -1,18 +1,24 @@
-// Get background image
-import { getHomepageBackdrop } from "../utils/justwatch"
-import Backdrop from "../components/backdrop"
+import CountryComponent from "@/app/search/country"
+import Query from "@/app/search/query"
+import SearchResults from "@/app/search/results"
+import Backdrop from "@/components/backdrop"
+import fetchHomepagePhoto from "@/utils/fetch/fetch-popular"
 
-// Search
-import Search from "./search"
-
-export default async () => {
-	const { id, slug } = await getHomepageBackdrop()
+const Home = async () => {
+	const { id, slug } = await fetchHomepagePhoto()
 
 	return (
-		<>
+		<div className="container">
 			<Backdrop id={id} slug={slug} />
 
-			<Search />
-		</>
+			<div className="row justify-content-center search-box">
+				<CountryComponent />
+				<Query />
+			</div>
+
+			<SearchResults />
+		</div>
 	)
 }
+
+export default Home

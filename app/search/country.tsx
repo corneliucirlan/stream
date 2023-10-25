@@ -1,25 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { useSessionStorage } from "usehooks-ts"
-import { DEFAULT_LOCALE, API_BASE_URL } from "../../utils/justwatch"
-import { LOCALE_KEY } from "./storage"
+import { DEFAULT_LOCALE, LOCALE_KEY } from "@/utils/globals"
+import { Country } from "@/utils/types"
+import fetchCountries from "@/utils/fetch/fetch-countries"
 
-import Country from "../../utils/interface/country"
+// Get all streaming providers for a specific country
+// https://apis.justwatch.com/content/providers/locale/en_US
 
-const fetchCountries = async () => {
-	return (
-		await (await fetch(`${API_BASE_URL}/content/locales/state`)).json()
-	).sort((a: Country, b: Country) => (a.country > b.country ? 1 : -1))
-}
-
-export default () => {
-	const [locale, setLocale] = useSessionStorage<string>(
-		LOCALE_KEY,
-		DEFAULT_LOCALE
-	)
-
+const CountryComponent = () => {
 	const [countries, setCountries] = useState<Country[]>()
+	const [locale, setLocale] = useSessionStorage(LOCALE_KEY, DEFAULT_LOCALE)
 
 	useEffect(() => {
 		fetchCountries().then(countries => setCountries(countries))
@@ -36,7 +28,7 @@ export default () => {
 				className="form-control"
 				onChange={handleChange}
 			>
-				{countries?.map((country: Country) => (
+				{countries?.map(country => (
 					<option
 						key={country.exposed_url_part}
 						value={country.full_locale}
@@ -48,3 +40,5 @@ export default () => {
 		</div>
 	)
 }
+
+export default CountryComponent

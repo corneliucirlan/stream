@@ -1,9 +1,9 @@
 "use client"
 
-import { QUERY_KEY } from "./storage"
+import { QUERY_KEY } from "@/utils/globals"
 import { useSessionStorage } from "usehooks-ts"
 
-export default () => {
+const Query = () => {
 	const [query, setQuery] = useSessionStorage<string>(QUERY_KEY, "")
 
 	// Update session storage
@@ -23,3 +23,5 @@ export default () => {
 		</div>
 	)
 }
+
+export default Query

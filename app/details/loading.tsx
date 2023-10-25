@@ -1,4 +1,4 @@
-export default () => (
+const Loading = () => (
 	<div className="container">
 		<div className="row">
 			<div className="col-12 col-md-3">
@@ -56,3 +56,5 @@ export default () => (
 		</div>
 	</div>
 )
+
+export default Loading

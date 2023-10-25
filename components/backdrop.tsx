@@ -1,13 +1,13 @@
-import { API_IMAGES_URL } from "../utils/justwatch"
-import BackdropData from "../utils/interface/backdrop"
+import { JUSTWATCH_IMAGE_URL } from "@/utils/fetch/fetch-globals"
+import { BackdropType } from "@/utils/types"
 
-export default ({ id, slug }: BackdropData) => {
-	return (
-		<div
-			className="bg-image"
-			style={{
-				backgroundImage: `url(${API_IMAGES_URL}/backdrop/${id}/s1920/${slug})`,
-			}}
-		/>
-	)
-}
+const Backdrop = async ({ id, slug }: BackdropType) => (
+	<div
+		className="bg-image"
+		style={{
+			backgroundImage: `url(${JUSTWATCH_IMAGE_URL}/backdrop/${id}/s1920/${slug})`
+		}}
+	/>
+)
+
+export default Backdrop

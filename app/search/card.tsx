@@ -1,32 +1,31 @@
-"use client"
-
 import Link from "next/link"
 import Image from "next/image"
-import { useState } from "react"
+import { SearchResult } from "@/utils/types"
 
-import SearchResult from "../../utils/interface/search-result"
-
-export default ({
+const Card = ({
 	id,
 	title,
 	type,
+	fullPath,
 	poster,
 	locale,
-	releaseYear,
+	releaseYear
 }: SearchResult) => {
-	const [isLoading, setIsLoading] = useState(true)
-
 	return (
 		<article className="col-6 col-md-2 card">
-			<Link href={`/${locale}/${type}/${id}`}>
-				<div className={`skeleton ${isLoading ? "" : "loaded"}`}>
-					<Image
-						onLoad={() => setIsLoading(false)}
-						src={poster}
-						width="592"
-						height="841"
-						alt={title}
-					/>
+			<Link
+				href={{
+					pathname: "/details",
+					query: {
+						fullPath: fullPath,
+						id: id,
+						type: type,
+						locale: locale
+					}
+				}}
+			>
+				<div className={`skeleton`}>
+					<Image src={poster} width="592" height="841" alt={title} />
 				</div>
 				<div className="card-background">
 					<div className="card-copy">
@@ -40,3 +39,5 @@ export default ({
 		</article>
 	)
 }
+
+export default Card
