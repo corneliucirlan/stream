@@ -3,8 +3,18 @@ export const JUSTWATCH_GRAPH_URL = `${JUSTWATCH_BASE_URL}/graphql`
 export const JUSTWATCH_IMAGE_URL = "https://images.justwatch.com"
 
 export const HEADERS = {
-	"Content-Type": "application/json",
-	"X-Requested-With": "fetch"
+	accept: "*/*",
+	"accept-language": "en-US,en;q=0.9",
+	"app-version": "3.8.0-web",
+	"content-type": "application/json",
+	"device-id": "rsRIG2n_Ee6cUfrEg3aSzA",
+	"sec-ch-ua":
+		'"Google Chrome";v="117", "Not;A=Brand";v="8", "Chromium";v="117"',
+	"sec-ch-ua-mobile": "?0",
+	"sec-ch-ua-platform": '"Windows"',
+	"sec-fetch-dest": "empty",
+	"sec-fetch-mode": "cors",
+	"sec-fetch-site": "same-site"
 }
 
 export const fetchOptions = {
