@@ -73,7 +73,10 @@ const TitleDetails = async ({
 
 				<h2 className="title-year">
 					{title.releaseYear} / {type}{" "}
-					{title.seasons && `/ ${title.seasons} seasons`}
+					{title.seasons &&
+						`/ ${title.seasons} season${
+							title.seasons === 1 ? "" : "s"
+						}`}
 				</h2>
 				<p className="offer-short-description">{title.description}</p>
 

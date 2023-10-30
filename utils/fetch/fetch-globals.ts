@@ -9,7 +9,7 @@ export const HEADERS = {
 
 export const fetchOptions = {
 	method: "POST",
-	mode: "no-cors" as RequestMode,
+	mode: "cors" as RequestMode,
 	credentials: "omit" as RequestCredentials,
 	headers: HEADERS
 }

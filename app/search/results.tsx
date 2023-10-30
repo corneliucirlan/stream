@@ -18,7 +18,7 @@ const SearchResults = () => {
 		// Abort controller
 		const controller = new AbortController()
 
-		// Remove search results
+		// Reset search results
 		if (searchQuery === "" || searchQuery === undefined)
 			setSearchResults(undefined)
 
@@ -27,10 +27,11 @@ const SearchResults = () => {
 			searchQuery !== undefined &&
 			searchQuery !== "" &&
 			searchLocale !== undefined
-		)
+		) {
 			fetchData(searchQuery, searchLocale, controller).then(result =>
 				setSearchResults(result)
 			)
+		}
 
 		// Abort fetch request if component ummounts
 		return () => controller.abort()

@@ -1,4 +1,4 @@
-const Loading = () => (
+const Loading =  () => (
 	<div className="container">
 		<div className="row">
 			<div className="col-12 col-md-3">

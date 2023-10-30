@@ -2,7 +2,11 @@
 const nextConfig = {
 	// Whitelist images domain
 	images: {
-		domains: ["images.justwatch.com"]
+		remotePatterns: [
+			{
+				hostname: "images.justwatch.com"
+			}
+		]
 	}
 }
 
