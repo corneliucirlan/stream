@@ -4,18 +4,19 @@ import { useState, useEffect } from "react"
 import { useSessionStorage } from "usehooks-ts"
 import { DEFAULT_LOCALE, LOCALE_KEY } from "@/utils/globals"
 import { Country } from "@/utils/types"
-import fetchCountries from "@/utils/fetch/fetch-countries"
+// import fetchCountries from "@/utils/fetch/fetch-countries"
+import countries from "@/utils/countries"
 
 // Get all streaming providers for a specific country
 // https://apis.justwatch.com/content/providers/locale/en_US
 
 const CountryComponent = () => {
-	const [countries, setCountries] = useState<Country[]>()
+	// const [countries, setCountries] = useState<Country[]>()
 	const [locale, setLocale] = useSessionStorage(LOCALE_KEY, DEFAULT_LOCALE)
 
-	useEffect(() => {
-		fetchCountries().then(countries => setCountries(countries))
-	}, [])
+	// useEffect(() => {
+	// 	fetchCountries().then(countries => setCountries(countries))
+	// }, [])
 
 	// Update session storage
 	const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) =>

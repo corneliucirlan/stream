@@ -1,6 +1,7 @@
 import { fetchOptions, JUSTWATCH_GRAPH_URL } from "@/utils/fetch/fetch-globals"
 import { OfferCountry, OfferCategory, OfferItem } from "@/utils/types"
 import fetchCountries from "./fetch-countries"
+import { getOffersByCountry } from "../puppeteer"
 
 const fetchOffersbyCountry = async (
 	id: number,
@@ -10,59 +11,42 @@ const fetchOffersbyCountry = async (
 	// Split locale into languate and country code
 	const [languageCode, countryCode] = locale.split("_")
 
-	// // Justwatch API request
-	// const request: Response = await fetch(JUSTWATCH_GRAPH_URL, {
-	// 	...fetchOptions,
-	// 	body:
-	// 		'{"operationName":"GetTitleOffers","variables":{"platform":"WEB","nodeId":"t' +
-	// 		type.charAt(0).toLowerCase() +
-	// 		id +
-	// 		'","country":"' +
-	// 		countryCode +
-	// 		'","language":"' +
-	// 		languageCode +
-	// 		'","filterBuy":{"monetizationTypes":["BUY"],"bestOnly":false,"presentationTypes":["SD", "HD", "_4K"]},"filterFlatrate":{"monetizationTypes":["FLATRATE","FLATRATE_AND_BUY","ADS","FREE","CINEMA"],"presentationTypes":["SD", "HD", "_4K"],"bestOnly":false},"filterRent":{"monetizationTypes":["RENT"],"presentationTypes":["SD", "HD", "_4K"],"bestOnly":false},"filterFree":{"monetizationTypes":["ADS","FREE"],"presentationTypes":["SD", "HD", "_4K"],"bestOnly":false}},"query":"query GetTitleOffers($nodeId: ID!, $country: Country!, $language: Language!, $filterFlatrate: OfferFilter!, $filterBuy: OfferFilter!, $filterRent: OfferFilter!, $filterFree: OfferFilter!, $platform: Platform! = WEB) {\\n  node(id: $nodeId) {\\n    id\\n    __typename\\n    ... on MovieOrShowOrSeasonOrEpisode {\\n      offerCount(country: $country, platform: $platform)\\n      flatrate: offers(\\n        country: $country\\n        platform: $platform\\n        filter: $filterFlatrate\\n      ) {\\n        ...TitleOffer\\n        __typename\\n      }\\n      buy: offers(country: $country, platform: $platform, filter: $filterBuy) {\\n        ...TitleOffer\\n        __typename\\n      }\\n      rent: offers(country: $country, platform: $platform, filter: $filterRent) {\\n        ...TitleOffer\\n        __typename\\n      }\\n      free: offers(country: $country, platform: $platform, filter: $filterFree) {\\n        ...TitleOffer\\n        __typename\\n      }\\n      __typename\\n    }\\n  }\\n}\\n\\nfragment TitleOffer on Offer {\\n  id\\n  presentationType\\n  monetizationType\\n  retailPrice(language: $language)\\n  retailPriceValue\\n  currency\\n  lastChangeRetailPriceValue\\n  type\\n  package {\\n    id\\n    packageId\\n    clearName\\n    technicalName\\n    icon(profile: S100)\\n    __typename\\n  }\\n  standardWebURL\\n  elementCount\\n  availableTo\\n  deeplinkRoku: deeplinkURL(platform: ROKU_OS)\\n  __typename\\n}\\n"}'
-	// })
-
 	const presentationTypes = ["SD", "HD", "_4K"]
-
-	const request: Response = await fetch(JUSTWATCH_GRAPH_URL, {
-		...fetchOptions,
-		body: JSON.stringify({
-			operationName: "GetTitleOffers",
-			variables: {
-				platform: "WEB",
-				nodeId: `t${type.charAt(0).toLowerCase()}${id}`,
-				country: countryCode,
-				language: languageCode,
-				filterBuy: {
-					monetizationTypes: ["BUY"],
-					bestOnly: false,
-					presentationTypes: presentationTypes
-				},
-				filterFlatrate: {
-					monetizationTypes: [
-						"FLATRATE",
-						"FLATRATE_AND_BUY",
-						"ADS",
-						"FREE",
-						"CINEMA"
-					],
-					presentationTypes: presentationTypes,
-					bestOnly: false
-				},
-				filterRent: {
-					monetizationTypes: ["RENT"],
-					presentationTypes: presentationTypes,
-					bestOnly: false
-				},
-				filterFree: {
-					monetizationTypes: ["ADS", "FREE"],
-					presentationTypes: presentationTypes,
-					bestOnly: false
-				}
+	const body = {
+		operationName: "GetTitleOffers",
+		variables: {
+			platform: "WEB",
+			nodeId: `t${type.charAt(0).toLowerCase()}${id}`,
+			country: countryCode,
+			language: languageCode,
+			filterBuy: {
+				monetizationTypes: ["BUY"],
+				bestOnly: false,
+				presentationTypes: presentationTypes
 			},
-			query: `
+			filterFlatrate: {
+				monetizationTypes: [
+					"FLATRATE",
+					"FLATRATE_AND_BUY",
+					"ADS",
+					"FREE",
+					"CINEMA"
+				],
+				presentationTypes: presentationTypes,
+				bestOnly: false
+			},
+			filterRent: {
+				monetizationTypes: ["RENT"],
+				presentationTypes: presentationTypes,
+				bestOnly: false
+			},
+			filterFree: {
+				monetizationTypes: ["ADS", "FREE"],
+				presentationTypes: presentationTypes,
+				bestOnly: false
+			}
+		},
+		query: `
       query GetTitleOffers(
         $nodeId: ID!,
         $country: Country!,
@@ -139,11 +123,17 @@ const fetchOffersbyCountry = async (
         __typename
       }
     `
-		})
+	}
+
+	const request: Response = await fetch(JUSTWATCH_GRAPH_URL, {
+		...fetchOptions,
+		body: JSON.stringify(body)
 	})
 
 	// Justwatch JSON response
 	const response = await request.json()
+
+	// const response = await getOffersByCountry(body)
 
 	// Create country offers array
 	let countryOffers: Array<OfferCategory> = []
