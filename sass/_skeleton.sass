@@ -52,6 +52,15 @@
 		height: 0
 		padding-bottom: 142.23% // 506/356 = 1.4223
 
+	&-card
+		width: 100%
+		position: relative
+
+		&::before
+			content: ""
+			display: block
+			padding-top: calc(282.46 / 198.83 * 100%)
+
 // Animation
 @keyframes skeleton-loading
 	0%

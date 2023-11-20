@@ -16,7 +16,7 @@ const Query = () => {
 				type="text"
 				className="form-control"
 				onChange={handleChange}
-				value={query !== null ? query : ""}
+				value={query}
 				placeholder="Search for a movie or tv show"
 				autoFocus={true}
 			/>

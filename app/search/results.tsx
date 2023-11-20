@@ -2,25 +2,26 @@
 
 import { Suspense, useEffect, useState } from "react"
 import { useSessionStorage } from "usehooks-ts"
-import { QUERY_KEY, LOCALE_KEY, DEFAULT_LOCALE } from "@/utils/globals"
+import {
+	QUERY_KEY,
+	LOCALE_KEY,
+	DEFAULT_LOCALE,
+	RESULTS_KEY
+} from "@/utils/globals"
 import fetchData from "@/utils/fetch/fetch-query"
 import { SearchResult } from "@/utils/types"
 import Card from "./card"
-import Loading from "./loading"
+import LoadingResults from "./loading-results"
 
 const SearchResults = () => {
 	const [searchQuery] = useSessionStorage(QUERY_KEY, undefined)
 	const [searchLocale] = useSessionStorage(LOCALE_KEY, DEFAULT_LOCALE)
-	const [searchResults, setSearchResults] = useState<
+	const [searchResults, setSearchResults] = useSessionStorage<
 		SearchResult[] | undefined
-	>(undefined)
-
-	// searchMovie().then(result => console.log("RESULT: ", result))
+	>(RESULTS_KEY, undefined)
+	const [isLoading, setISLoading] = useState(false)
 
 	useEffect(() => {
-		// Abort controller
-		const controller = new AbortController()
-
 		// Reset search results
 		if (searchQuery === "" || searchQuery === undefined)
 			setSearchResults(undefined)
@@ -29,20 +30,23 @@ const SearchResults = () => {
 		if (
 			searchQuery !== undefined &&
 			searchQuery !== "" &&
-			searchLocale !== undefined
+			searchLocale !== undefined &&
+			searchResults === undefined
 		) {
-			fetchData(searchQuery, searchLocale, controller).then(result =>
+			setISLoading(true)
+			fetchData(searchQuery, searchLocale).then(result => {
 				setSearchResults(result)
-			)
+				setISLoading(false)
+			})
 		}
+	}, [searchQuery, searchLocale, setSearchResults, searchResults])
 
-		// Abort fetch request if component ummounts
-		return () => controller.abort()
-	}, [searchQuery, searchLocale])
+	if (searchResults === undefined && isLoading === true)
+		return <LoadingResults />
 
 	return (
 		<section className="row">
-			<Suspense fallback={<Loading />}>
+			<Suspense>
 				{searchResults?.map((result: SearchResult) => (
 					<Card
 						key={result.id}

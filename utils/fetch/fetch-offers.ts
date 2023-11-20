@@ -1,172 +1,43 @@
 import { fetchOptions, JUSTWATCH_GRAPH_URL } from "@/utils/fetch/fetch-globals"
-import { OfferCountry, OfferCategory, OfferItem } from "@/utils/types"
+import { OfferCountry, OfferCategory, OfferItem, Country } from "@/utils/types"
 import fetchCountries from "./fetch-countries"
 import { getOffersByCountry } from "../puppeteer"
 
-const fetchOffersbyCountry = async (
-	id: number,
-	type: string,
-	locale: string
-): Promise<OfferCategory[]> => {
-	// Split locale into languate and country code
-	const [languageCode, countryCode] = locale.split("_")
-
-	const presentationTypes = ["SD", "HD", "_4K"]
-	const body = {
-		operationName: "GetTitleOffers",
-		variables: {
-			platform: "WEB",
-			nodeId: `t${type.charAt(0).toLowerCase()}${id}`,
-			country: countryCode,
-			language: languageCode,
-			filterBuy: {
-				monetizationTypes: ["BUY"],
-				bestOnly: false,
-				presentationTypes: presentationTypes
-			},
-			filterFlatrate: {
-				monetizationTypes: [
-					"FLATRATE",
-					"FLATRATE_AND_BUY",
-					"ADS",
-					"FREE",
-					"CINEMA"
-				],
-				presentationTypes: presentationTypes,
-				bestOnly: false
-			},
-			filterRent: {
-				monetizationTypes: ["RENT"],
-				presentationTypes: presentationTypes,
-				bestOnly: false
-			},
-			filterFree: {
-				monetizationTypes: ["ADS", "FREE"],
-				presentationTypes: presentationTypes,
-				bestOnly: false
-			}
-		},
-		query: `
-      query GetTitleOffers(
-        $nodeId: ID!,
-        $country: Country!,
-        $language: Language!,
-        $filterFlatrate: OfferFilter!,
-        $filterBuy: OfferFilter!,
-        $filterRent: OfferFilter!,
-        $filterFree: OfferFilter!,
-        $platform: Platform! = WEB
-      ) {
-        node(id: $nodeId) {
-          id
-          __typename
-          ... on MovieOrShowOrSeasonOrEpisode {
-            offerCount(country: $country, platform: $platform)
-            flatrate: offers(
-              country: $country
-              platform: $platform
-              filter: $filterFlatrate
-            ) {
-              ...TitleOffer
-              __typename
-            }
-            buy: offers(
-              country: $country
-              platform: $platform
-              filter: $filterBuy
-            ) {
-              ...TitleOffer
-              __typename
-            }
-            rent: offers(
-              country: $country
-              platform: $platform
-              filter: $filterRent
-            ) {
-              ...TitleOffer
-              __typename
-            }
-            free: offers(
-              country: $country
-              platform: $platform
-              filter: $filterFree
-            ) {
-              ...TitleOffer
-              __typename
-            }
-            __typename
-          }
-        }
-      }
-
-      fragment TitleOffer on Offer {
-        id
-        presentationType
-        monetizationType
-        retailPrice(language: $language)
-        retailPriceValue
-        currency
-        lastChangeRetailPriceValue
-        type
-        package {
-          id
-          packageId
-          clearName
-          technicalName
-          icon(profile: S100)
-          __typename
-        }
-        standardWebURL
-        elementCount
-        availableTo
-        deeplinkRoku: deeplinkURL(platform: ROKU_OS)
-        __typename
-      }
-    `
-	}
-
-	const request: Response = await fetch(JUSTWATCH_GRAPH_URL, {
-		...fetchOptions,
-		body: JSON.stringify(body)
-	})
-
-	// Justwatch JSON response
-	const response = await request.json()
-
-	// const response = await getOffersByCountry(body)
-
+const offersByCountry = (country: any): OfferCountry | null => {
 	// Create country offers array
-	let countryOffers: Array<OfferCategory> = []
+	let offers: Array<OfferCategory> = []
 
 	// Process all offer types
 	const offerTypes = [
 		{
 			name: "Stream",
-			offers: combineAndGroupByPackageId(response.data.node.flatrate)
+			offers: combineAndGroupByPackageId(country.offers.flatrate)
 		},
 		{
 			name: "Buy",
-			offers: combineAndGroupByPackageId(response.data.node.buy)
+			offers: combineAndGroupByPackageId(country.offers.buy)
 		},
 		{
 			name: "Rent",
-			offers: combineAndGroupByPackageId(response.data.node.rent)
+			offers: combineAndGroupByPackageId(country.offers.rent)
 		},
 		{
 			name: "Free",
-			offers: combineAndGroupByPackageId(response.data.node.free)
+			offers: combineAndGroupByPackageId(country.offers.free)
 		}
 	]
 
 	// Add all available offers
 	for (const offerType of offerTypes) {
 		if (offerType.offers.length !== 0) {
-			countryOffers.push(offerType)
+			offers.push(offerType)
 		}
 	}
 
-	// Return all available offers for a country
-	return countryOffers
+	// Return offers if available
+	return offers.length > 0
+		? { name: country.name, locale: country.locale, offers }
+		: null
 }
 
 const combineAndGroupByPackageId = (offers: any[]): Array<OfferItem> => {
@@ -200,34 +71,27 @@ const combineAndGroupByPackageId = (offers: any[]): Array<OfferItem> => {
 	return result
 }
 
-const fetchOffersByTitle = async (
+export const fetchOffersByTitle = async (
 	id: number,
 	type: string
 ): Promise<OfferCountry[] | void> => {
 	// Get all available countries
 	const countries = await fetchCountries()
+	const rawData = await getOffersByCountry(JSON.stringify([id, type]))
 
-	// console.log(countries)
-	const promises = countries.map(country => {
-		const name = country.country
-		const locale = country.full_locale
+	for (const index in countries)
+		rawData[index].name = countries[index].country
 
-		return fetchOffersbyCountry(id, type, country.full_locale).then(
-			offers => {
-				return { name, locale, offers }
-			}
-		)
+	// Get all offers by country
+	const allOffers = rawData.map((data: any) => {
+		return offersByCountry(data)
 	})
 
-	return Promise.all(promises)
-		.then(allOffers => {
-			// Handle the results here
-			const filtered = allOffers.filter(
-				offer => offer?.offers?.length > 0
-			)
-			return filtered
-		})
-		.catch(error => console.error(error))
+	// Filter out empty offers
+	const filtered = allOffers.filter((value: any) => value !== null)
+
+	// Return all available offers
+	return filtered
 }
 
 export default fetchOffersByTitle

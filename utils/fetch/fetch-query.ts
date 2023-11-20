@@ -9,8 +9,7 @@ import { searchMovie } from "../puppeteer"
 
 const fetchData = async (
 	query: string,
-	locale: string,
-	controller: AbortController
+	locale: string
 ): Promise<SearchResult[]> => {
 	const [languageCode, countryCode] = locale.split("_")
 
@@ -58,14 +57,7 @@ const fetchData = async (
 	`
 	}
 
-	// const request = await fetch(JUSTWATCH_GRAPH_URL, {
-	// 	...fetchOptions,
-	// 	signal: controller.signal,
-	// 	body: JSON.stringify(getSuggestedTitlesQuery)
-	// })
-	// const response = await request.json()
-
-	const response = await searchMovie(query)
+	const response = await searchMovie(query, locale)
 	// console.log(response)
 	const searchResults = response?.data?.popularTitles?.edges?.map(
 		(result: any) => {
@@ -77,7 +69,7 @@ const fetchData = async (
 				poster: `${JUSTWATCH_IMAGE_URL}/poster/${getPhotoID(
 					result.node.content.posterUrl
 				)}/s592/poster.webp`,
-				locale: "en_US",
+				locale: locale,
 				releaseYear: result.node.content.originalReleaseYear
 			}
 		}
