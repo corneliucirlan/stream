@@ -1,31 +1,24 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { useSessionStorage } from "usehooks-ts"
 import { DEFAULT_LOCALE, LOCALE_KEY } from "@/utils/globals"
 import { Country } from "@/utils/types"
-import fetchCountries from "@/utils/fetch/fetch-countries"
 
 // Get all streaming providers for a specific country
 // https://apis.justwatch.com/content/providers/locale/en_US
 
-const CountryComponent = () => {
-	const [countries, setCountries] = useState<Country[]>()
+const CountryComponent = ({ countries }: { countries: Country[] }) => {
 	const [locale, setLocale] = useSessionStorage(LOCALE_KEY, DEFAULT_LOCALE)
-
-	useEffect(() => {
-		fetchCountries().then(countries => setCountries(countries))
-	}, [])
 
 	// Update session storage
 	const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
 		setLocale(event.target.value)
 
 	return (
-		<div className="col-12 col-md-2">
+		<div className="m-5 w-auto">
 			<select
 				value={locale}
-				className="form-control"
+				className="focus:shadow-outline w-full appearance-none rounded border px-5 py-3 leading-tight text-gray-700 shadow focus:outline-none"
 				onChange={handleChange}
 			>
 				{countries?.map(country => (

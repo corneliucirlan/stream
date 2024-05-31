@@ -47,12 +47,12 @@ const TitleDetails = async ({
 	// Get Trakt.tv URL
 	const traktURL = await getTraktUrl(title.imdb, type.toLowerCase())
 	return (
-		<div className="row">
+		<div className="flex">
 			<Backdrop
 				id={getRandomBackdropID(title.backdrops)}
 				slug={`${title.slug}.webp`}
 			/>
-			<div className="col-12 col-md-3">
+			<div className="mr-4 w-1/4">
 				<Image
 					src={title.poster}
 					width="592"
@@ -62,35 +62,32 @@ const TitleDetails = async ({
 				/>
 			</div>
 
-			<div className="col-12 col-md-9">
+			<div className="w-3/4">
 				<Link
 					href={traktURL.href}
 					target="_blank"
 					title={`Open Trakt.tv page for "${title.title}"`}
 				>
-					<h1>{title.title}</h1>
+					<h1 className="text-h1 font-bold">{title.title}</h1>
 				</Link>
 
-				<h2 className="title-year">
+				<h2 className="mt-2 text-h2 uppercase">
 					{title.releaseYear} / {type}{" "}
 					{title.seasons &&
 						`/ ${title.seasons} season${
 							title.seasons === 1 ? "" : "s"
 						}`}
 				</h2>
-				<p className="offer-short-description">{title.description}</p>
+				<p className="mt-2">{title.description}</p>
 
-				<h2 className="title-cast">Cast</h2>
-				<div className="row d-flex">
+				<h2 className="mb-1 mt-4 text-h2">Cast</h2>
+				<div className="flex">
 					{title?.credits?.slice(0, 5).map((credit: any) => (
-						<div
-							key={credit.name}
-							className="col-12 col-md-4 actor"
-						>
-							<p className="actor-name">{credit.name}</p>
-							<p className="actor-character">
-								{credit.characterName}
+						<div key={credit.name} className="flex-auto">
+							<p className="font-semibold text-gray-500">
+								{credit.name}
 							</p>
+							<p className="">{credit.characterName}</p>
 						</div>
 					))}
 				</div>

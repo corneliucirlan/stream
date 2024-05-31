@@ -23,22 +23,23 @@ const SearchResults = () => {
 			setSearchResults(undefined)
 
 		// Update search results
-		if (
-			searchQuery !== undefined &&
-			searchQuery !== "" &&
-			searchLocale !== undefined
-		) {
-			fetchData(searchQuery, searchLocale, controller).then(result =>
-				setSearchResults(result)
-			)
+		if (searchQuery && searchLocale) {
+			fetchData(searchQuery, searchLocale, controller)
+				.then(result => setSearchResults(result))
+				.catch(error => {
+					if (error.name === "AbortError")
+						console.log(
+							`Fetch request was aborted: ${error.message}`
+						)
+				})
 		}
 
 		// Abort fetch request if component ummounts
-		return () => controller.abort()
+		return () => controller.abort("Component unmounted")
 	}, [searchQuery, searchLocale])
 
 	return (
-		<section className="row">
+		<section className="mt-20 grid grid-cols-5 gap-10">
 			{searchResults?.map((result: SearchResult) => (
 				<Card
 					key={result.id}
