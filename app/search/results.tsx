@@ -27,20 +27,19 @@ const SearchResults = () => {
 			setSearchResults(undefined)
 
 		// Update search results
-		if (
-			searchQuery !== undefined &&
-			searchQuery !== "" &&
-			searchLocale !== undefined &&
-			searchResults === undefined
-		) {
-			setISLoading(true)
-			fetchData(searchQuery, searchLocale).then(result => {
-				setSearchResults(result)
-				setISLoading(false)
-			})
+		if (searchQuery && searchLocale) {
+			fetchData(searchQuery, searchLocale, controller)
+				.then(result => setSearchResults(result))
+				.catch(error => {
+					if (error.name === "AbortError")
+						console.log(
+							`Fetch request was aborted: ${error.message}`
+						)
+				})
 		}
 	}, [searchQuery, searchLocale, setSearchResults, searchResults])
 
+<<<<<<< HEAD
 	if (searchResults === undefined && isLoading === true)
 		return <LoadingResults />
 
@@ -60,6 +59,26 @@ const SearchResults = () => {
 					/>
 				))}
 			</Suspense>
+=======
+		// Abort fetch request if component ummounts
+		return () => controller.abort("Component unmounted")
+	}, [searchQuery, searchLocale])
+
+	return (
+		<section className="mt-20 grid grid-cols-5 gap-10">
+			{searchResults?.map((result: SearchResult) => (
+				<Card
+					key={result.id}
+					id={result.id}
+					title={result.title}
+					fullPath={result.fullPath}
+					type={result.type}
+					poster={result.poster}
+					locale={searchLocale}
+					releaseYear={result.releaseYear}
+				/>
+			))}
+>>>>>>> tailwind
 		</section>
 	)
 }

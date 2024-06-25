@@ -1,60 +1,86 @@
-const Loading =  () => (
-	<div className="container">
-		<div className="row">
-			<div className="col-12 col-md-3">
-				<div className="skeleton skeleton-poster" />
-			</div>
+import { CSSProperties, FC } from "react"
 
-			<div className="col-12 col-md-9">
-				<div className="skeleton skeleton-h1" />
-				<div className="skeleton skeleton-h2" />
+interface PulseDivProps {
+	className?: string
+	style?: CSSProperties
+}
 
-				{Array(3)
-					.fill(0)
-					.map((_, index) => (
-						<div key={index} className="skeleton skeleton-p" />
-					))}
+const PulseDiv: FC<PulseDivProps> = ({ className, style }) => (
+	<div
+		style={style}
+		className={`animate-pulse rounded-md bg-white bg-opacity-20 ${className}`}
+	/>
+)
 
-				<div className="skeleton skeleton-h2" />
-				<div className="row d-flex skeleton-container">
-					{Array(5)
-						.fill(0)
-						.map((_, index) => (
-							<div key={index} className="col-6 col-md-2">
-								<div className="skeleton skeleton-inline" />
-								<div className="skeleton skeleton-inline" />
-							</div>
-						))}
-				</div>
-			</div>
-		</div>
+const Loading: FC = () => (
+	<>
+		<div className="fixed inset-x-0 inset-y-0 -z-10 bg-black"></div>
+		<div className="flex h-svh bg-black">
+			<div className="container mx-auto mt-10 max-w-7xl">
+				<div className="flex">
+					<div className="mr-4 w-1/4">
+						<PulseDiv
+							style={{ paddingBottom: "145%" }}
+							className="w-full"
+						/>
+					</div>
+					<div className="w-3/4">
+						<PulseDiv className="h-14 w-1/2" />
+						<PulseDiv className="mt-4 h-8 w-1/4" />
 
-		<div className="row offers-available">
-			<div className="col-12 stream-country">
-				<div className="skeleton skeleton-h2" />
-
-				{Array(3)
-					.fill(0)
-					.map((_, index) => (
-						<div key={index} className="stream-category">
-							<div className="skeleton skeleton-h3" />
+						<div className="mt-4 h-auto">
 							{Array(5)
 								.fill(0)
 								.map((_, index) => (
-									<div
+									<PulseDiv
 										key={index}
-										className="stream-item d-inline-flex flex-column align-items-center justify-content-center"
-									>
-										<div className="skeleton skeleton-icon" />
-										<div className="skeleton skeleton-name" />
-										<div className="skeleton skeleton-name" />
+										className="w-100 mt-2 h-4"
+									/>
+								))}
+						</div>
+
+						<PulseDiv className="mt-8 h-8 w-1/4" />
+						<div className="mt-2 flex gap-2">
+							{Array(5)
+								.fill(0)
+								.map((_, index) => (
+									<div key={index} className="flex-auto">
+										<PulseDiv className="mt-2 h-4" />
+										<PulseDiv className="mt-2 h-4" />
 									</div>
 								))}
 						</div>
-					))}
+					</div>
+				</div>
+
+				<div className="container mx-auto mt-20 max-w-7xl">
+					<div className="mb-8 rounded-xl bg-white bg-opacity-5 p-12 pb-4">
+						<PulseDiv className="mt-8 h-8 w-1/4" />
+						{Array(4)
+							.fill(0)
+							.map((_, index) => (
+								<div key={index} className="mt-4">
+									<PulseDiv className="h-4 w-1/4" />
+
+									{Array(15)
+										.fill(0)
+										.map((_, index) => (
+											<div
+												key={index}
+												className="inline-flex max-w-24 flex-col items-center justify-items-center p-4 text-center"
+											>
+												<PulseDiv className="h-10 w-10" />
+												<PulseDiv className="mt-2 h-2 w-full" />
+												<PulseDiv className="mt-2 h-2 w-full" />
+											</div>
+										))}
+								</div>
+							))}
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
+	</>
 )
 
 export default Loading

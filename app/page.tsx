@@ -11,7 +11,7 @@ const Home = async () => {
 	const countries = await fetchCountries()
 
 	return (
-		<div className="container">
+		<div className="container mx-auto max-w-7xl">
 			<Backdrop id={id} slug={slug} />
 
 			<Form countries={countries} />

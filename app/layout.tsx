@@ -1,7 +1,10 @@
-// Global SASS
-import "../sass/style.sass"
+// Tailwind CSS
+import "./style.sass"
 
+// Metadata
 import type { Metadata } from "next"
+
+// Google font
 import { Inter } from "next/font/google"
 
 const inter = Inter({ subsets: ["latin"] })

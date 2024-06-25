@@ -11,12 +11,12 @@ const Query = () => {
 		setQuery(event.target.value)
 
 	return (
-		<div className="col-12 col-md-4">
+		<div className="m-5 w-1/3">
 			<input
 				type="text"
-				className="form-control"
+				className="focus:shadow-outline w-full appearance-none rounded border px-5 py-3 leading-tight text-gray-700 shadow focus:outline-none"
 				onChange={handleChange}
-				value={query}
+				value={query || ""}
 				placeholder="Search for a movie or tv show"
 				autoFocus={true}
 			/>

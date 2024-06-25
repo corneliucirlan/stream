@@ -4,8 +4,9 @@ import Link from "next/link"
 import { getPhotoID } from "@/utils/photo"
 
 const ItemOffer = ({ offer }: { offer: OfferItem }) => (
-	<div className="stream-item d-inline-flex flex-column align-items-center justify-content-center">
-		<div className="stream-logo">
+	// <div className="stream-item d-inline-flex flex-column align-items-center justify-content-center">
+	<div className="inline-flex max-w-24 flex-col items-center justify-items-center p-4 text-center">
+		<div className="">
 			<Link href={offer.standardWebURL} target="_blank">
 				<Image
 					src={`https://images.justwatch.com/icon/${getPhotoID(
@@ -23,10 +24,10 @@ const ItemOffer = ({ offer }: { offer: OfferItem }) => (
 			</Link>
 		</div>
 		{offer.package.clearName && (
-			<p className="stream-name">{offer.package.clearName}</p>
+			<p className="my-2">{offer.package.clearName}</p>
 		)}
 		{offer.presentationTypes && (
-			<p className="stream-resolutions">
+			<p className="text-xs uppercase text-white text-opacity-50">
 				{offer.presentationTypes.join(" / ")}
 			</p>
 		)}
