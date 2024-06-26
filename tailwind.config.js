@@ -10,7 +10,11 @@ module.exports = {
 			h2: "1.875rem",
 			h3: "1.5rem"
 		},
-		extend: {}
+		extend: {
+			aspectRatio: {
+        		'7/10': '7 / 10',
+      		},
+		}
 	},
 	variants: {},
 	plugins: []

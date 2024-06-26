@@ -1,11 +1,5 @@
 import { BackdropType } from "@/utils/types"
 import { getRandomBackdropID } from "@/utils/photo"
-<<<<<<< HEAD
-import { getBackgroundImage } from "../puppeteer"
-
-const fetchHomepagePhoto = async (): Promise<BackdropType> => {
-	const data = await getBackgroundImage()
-=======
 import { HEADERS, JUSTWATCH_GRAPH_URL } from "./fetch-globals"
 
 const fetchHomepagePhoto = async (): Promise<BackdropType> => {
@@ -21,7 +15,6 @@ const fetchHomepagePhoto = async (): Promise<BackdropType> => {
 
 	const data = await response.json()
 	// console.log("MOST POPULAR: ", data.data.popularTitles.edges[0].node.content)
->>>>>>> tailwind
 
 	// Backdrop ID regex
 	const regex = /\s*([0-9]+)/

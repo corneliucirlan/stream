@@ -54,11 +54,11 @@ const Form = ({ countries }: { countries: Array<Country> }) => {
 	return (
 		<>
 			<form onSubmit={handleSubmit}>
-				<div className="row justify-content-center search-box">
-					<div className="col-12 col-md-2">
+				<div className="mt-20 flex w-auto justify-center">
+					<div className="m-5">
 						<select
 							value={searchLocale}
-							className="form-control"
+							className="shadow-outline w-full appearance-none rounded border px-5 py-3 leading-tight text-gray-700 shadow focus:outline-none"
 							onChange={(
 								event: React.ChangeEvent<HTMLSelectElement>
 							) => setSearchLocale(event.target.value)}
@@ -74,10 +74,10 @@ const Form = ({ countries }: { countries: Array<Country> }) => {
 						</select>
 					</div>
 
-					<div className="col-12 col-md-4">
+					<div className="m-5 w-1/3">
 						<input
 							type="text"
-							className="form-control"
+							className="focus:shadow-outline w-full appearance-none rounded border px-5 py-3 leading-tight text-gray-700 shadow focus:outline-none"
 							onChange={(
 								event: React.ChangeEvent<HTMLInputElement>
 							) => setSearchQuery(event.target.value)}
@@ -92,7 +92,7 @@ const Form = ({ countries }: { countries: Array<Country> }) => {
 			{isLoading && <LoadingResults />}
 
 			{searchResults !== undefined && (
-				<section className="row">
+				<section className="mt-20 grid grid-cols-6 gap-8">
 					<Suspense>
 						{searchResults?.map((result: SearchResult) => (
 							<Card

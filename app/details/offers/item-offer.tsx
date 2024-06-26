@@ -4,9 +4,8 @@ import Link from "next/link"
 import { getPhotoID } from "@/utils/photo"
 
 const ItemOffer = ({ offer }: { offer: OfferItem }) => (
-	// <div className="stream-item d-inline-flex flex-column align-items-center justify-content-center">
-	<div className="inline-flex max-w-24 flex-col items-center justify-items-center p-4 text-center">
-		<div className="">
+	<div className="inline-flex w-36 flex-col items-center justify-items-center p-4 text-center">
+		<div>
 			<Link href={offer.standardWebURL} target="_blank">
 				<Image
 					src={`https://images.justwatch.com/icon/${getPhotoID(
