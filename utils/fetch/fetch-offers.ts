@@ -58,7 +58,7 @@ const combineAndGroupByPackageId = (offers: any[]): Array<OfferItem> => {
 				offer.presentationType
 			]
 			delete combinedOffers[packageId].presentationType
-		} else {
+		} else if (!combinedOffers[packageId].presentationTypes.includes(offer.presentationType)) {
 			combinedOffers[packageId].presentationTypes.push(
 				offer.presentationType
 			)
