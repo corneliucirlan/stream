@@ -1,5 +1,4 @@
 import TitleDetails from "./details"
-import Loading from "./loading"
 import Offers from "./offers"
 import { SearchParams } from "@/utils/types"
 

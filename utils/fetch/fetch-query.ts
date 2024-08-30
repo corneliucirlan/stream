@@ -1,64 +1,22 @@
-import {
-	fetchOptions,
-	JUSTWATCH_GRAPH_URL,
-	JUSTWATCH_IMAGE_URL
-} from "@/utils/fetch/fetch-globals"
+"use server"
+
+import { JUSTWATCH_IMAGE_URL } from "@/utils/fetch/fetch-globals"
 import { SearchResult } from "@/utils/types"
 import { getPhotoID } from "@/utils/photo"
-import { searchMovie } from "../puppeteer"
+import { initBrowser } from "../puppeteer"
+import querySearch from "../query/query-search"
 
 const fetchData = async (
-	query: string,
-	locale: string
+	searchQuery: string,
+	searchLocale: string
 ): Promise<SearchResult[]> => {
-	const [languageCode, countryCode] = locale.split("_")
+	// Extract language and country codes
+	const [languageCode, countryCode] = searchLocale.split("_")
 
-	const commonQueryVariables = {
-		country: countryCode,
-		language: languageCode,
-		first: 18
-	}
+	const response = await initBrowser(
+		querySearch(languageCode, countryCode, searchQuery)
+	)
 
-	const getSuggestedTitlesQuery = {
-		operationName: "GetSuggestedTitles",
-		variables: {
-			...commonQueryVariables,
-			filter: {
-				searchQuery: query
-			}
-		},
-		query: `query GetSuggestedTitles($country: Country!, $language: Language!, $first: Int!, $filter: TitleFilter) {
-		popularTitles(country: $country, first: $first, filter: $filter) {
-			edges {
-				node {
-					...SuggestedTitle
-					__typename
-				}
-				__typename
-			}
-			__typename
-		}
-	}
-	
-	fragment SuggestedTitle on MovieOrShow {
-		id
-		objectType
-		objectId
-		content(country: $country, language: $language) {
-			fullPath
-			title
-			originalReleaseYear
-			posterUrl
-			fullPath
-			__typename
-		}
-		__typename
-	}
-	`
-	}
-
-	const response = await searchMovie(query, locale)
-	// console.log(response)
 	const searchResults = response?.data?.popularTitles?.edges?.map(
 		(result: any) => {
 			return {
@@ -69,7 +27,7 @@ const fetchData = async (
 				poster: `${JUSTWATCH_IMAGE_URL}/poster/${getPhotoID(
 					result.node.content.posterUrl
 				)}/s592/poster.webp`,
-				locale: locale,
+				locale: searchLocale,
 				releaseYear: result.node.content.originalReleaseYear
 			}
 		}

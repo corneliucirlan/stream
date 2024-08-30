@@ -1,13 +1,21 @@
-import { JUSTWATCH_GRAPH_URL, fetchOptions } from "@/utils/fetch/fetch-globals"
+"use server"
+
 import { Details } from "@/utils/types"
 import { getPhotoID } from "@/utils/photo"
-import { getTitleDetails } from "@/utils/puppeteer"
+import { initBrowser } from "../puppeteer"
+import queryTitleDetails from "../query/query-details"
 
 const fetchTitleDetails = async (
 	locale: string,
 	fullPath: string
 ): Promise<Details> => {
-	const response = await getTitleDetails(locale, fullPath)
+	// Extract language and country codes
+	const [languageCode, countryCode] = locale.split("_")
+
+	// Return data
+	const response = await initBrowser(
+		queryTitleDetails(fullPath, languageCode, countryCode)
+	)
 
 	const backdrops: number[] = response.data.urlV2.node.content.backdrops.map(
 		(backdrop: any) => getPhotoID(backdrop.backdropUrl)
