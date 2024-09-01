@@ -1,4 +1,4 @@
-import ItemOffer from "./item-offer"
+import ItemOffer from "@/app/details/offers/item-offer"
 import { OfferCategory, OfferItem } from "@/utils/types"
 
 const CategoryOffers = ({

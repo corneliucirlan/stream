@@ -4,7 +4,7 @@ import Link from "next/link"
 import { getPhotoID } from "@/utils/photo"
 
 const ItemOffer = ({ offer }: { offer: OfferItem }) => (
-	<div className="inline-flex w-36 flex-col items-center justify-items-center p-4 text-center">
+	<div className="inline-flex w-28 flex-col items-center justify-items-center p-4 text-center">
 		<div>
 			<Link href={offer.standardWebURL} target="_blank">
 				<Image

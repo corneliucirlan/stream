@@ -1,5 +1,5 @@
 import { OfferCategory, OfferCountry } from "@/utils/types"
-import CategoryOffers from "./category-offers"
+import CategoryOffers from "@/app/details/offers/category-offers"
 
 const CountryOffers = ({ countryOffers }: { countryOffers: OfferCountry }) => (
 	<div className="mb-8 rounded-xl bg-white bg-opacity-5 p-12 pb-4">
