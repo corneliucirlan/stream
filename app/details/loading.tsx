@@ -26,7 +26,7 @@ const Loading: FC = () => (
 					</div>
 					<div className="w-3/4">
 						<PulseDiv className="h-14 w-1/2" />
-						<PulseDiv className="mt-4 h-8 w-1/4" />
+						<PulseDiv className="mt-4 h-4 w-1/3" />
 
 						<div className="mt-4 h-auto">
 							{Array(5)
@@ -40,7 +40,17 @@ const Loading: FC = () => (
 						</div>
 
 						<PulseDiv className="mt-8 h-8 w-1/4" />
-						<div className="mt-2 flex gap-2">
+						<div className="mt-4 h-auto">
+							{Array(3)
+								.fill(0)
+								.map((_, index) => (
+									<PulseDiv
+										key={index}
+										className="w-100 mt-2 h-4"
+									/>
+								))}
+						</div>
+						{/* <div className="mt-2 flex gap-2">
 							{Array(5)
 								.fill(0)
 								.map((_, index) => (
@@ -49,7 +59,7 @@ const Loading: FC = () => (
 										<PulseDiv className="mt-2 h-4" />
 									</div>
 								))}
-						</div>
+						</div> */}
 					</div>
 				</div>
 

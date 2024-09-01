@@ -18,6 +18,12 @@ const TitleDetails = async ({
 
 	// Get Trakt.tv URL
 	const traktURL = await getTraktUrl(title.imdb, type.toLowerCase())
+
+	const credits = title?.credits
+		?.slice(0, 20)
+		.map((credit: any) => credit.name)
+	const titleCredits = credits.join(", ").replace(/,([^,]*)$/, " and$1")
+
 	return (
 		<div className="flex">
 			<Backdrop
@@ -43,7 +49,7 @@ const TitleDetails = async ({
 					<h1 className="text-h1 font-bold">{title.title}</h1>
 				</Link>
 
-				<h2 className="mt-2 text-h2 uppercase">
+				<span className="text-h4 mt-2 uppercase text-gray-500">
 					{title.releaseYear} / {type}{" "}
 					{title.seasons &&
 						`/ ${title.seasons} season${
@@ -51,11 +57,13 @@ const TitleDetails = async ({
 						}`}
 					{type === "SHOW" &&
 						(title.continuing ? " / CONTINUING" : " / ENDED")}
-				</h2>
+				</span>
 				<p className="mt-2">{title.description}</p>
 
 				<h2 className="mb-1 mt-4 text-h2">Cast</h2>
-				<div className="flex">
+				{titleCredits}
+
+				{/* <div className="flex">
 					{title?.credits?.slice(0, 5).map((credit: any) => (
 						<div key={credit.name} className="flex-auto">
 							<p className="font-semibold text-gray-500">
@@ -64,7 +72,7 @@ const TitleDetails = async ({
 							<p className="">{credit.characterName}</p>
 						</div>
 					))}
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)

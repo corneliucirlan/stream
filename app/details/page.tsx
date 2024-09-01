@@ -1,10 +1,10 @@
-import TitleDetails from "./details"
-import Offers from "./offers"
+import TitleDetails from "@/app/details/details"
+import Loading from "@/app/details/loading"
+import Offers from "@/app/details/offers"
 import { SearchParams } from "@/utils/types"
 
 const DetailsPage = ({ searchParams }: { searchParams: SearchParams }) => {
 	return (
-		// <Loading />
 		<div className="container mx-auto mt-10 max-w-7xl text-white">
 			<TitleDetails
 				type={searchParams.type}
