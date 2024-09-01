@@ -49,6 +49,8 @@ const TitleDetails = async ({
 						`/ ${title.seasons} season${
 							title.seasons === 1 ? "" : "s"
 						}`}
+					{type === "SHOW" &&
+						(title.continuing ? " / CONTINUING" : " / ENDED")}
 				</h2>
 				<p className="mt-2">{title.description}</p>
 

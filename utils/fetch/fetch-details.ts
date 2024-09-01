@@ -35,7 +35,10 @@ const fetchTitleDetails = async (
 		}),
 		backdrops: backdrops,
 		slug: response.data.urlV2.node.content.fullPath.split("/").pop(),
-		imdb: response.data.urlV2.node.content.externalIds.imdbId
+		imdb: response.data.urlV2.node.content.externalIds.imdbId,
+		...(response.data.urlV2.node.content.upcomingReleases.length > 0 && {
+			continuing: true
+		})
 	}
 }
 

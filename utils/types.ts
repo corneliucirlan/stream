@@ -32,6 +32,7 @@ export type Details = {
 	backdrops: number[]
 	slug: string
 	imdb: string
+	continuing?: boolean
 }
 
 export type SearchParams = {
