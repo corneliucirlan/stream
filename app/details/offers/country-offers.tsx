@@ -3,8 +3,8 @@ import CategoryOffers from "@/app/details/offers/category-offers"
 
 const CountryOffers = ({ countryOffers }: { countryOffers: OfferCountry }) => (
 	<div className="mb-8 rounded-xl bg-white bg-opacity-5 p-12 pb-4">
-		<div className="">
-		<h2 className="mb-2 text-h2">{countryOffers.name}</h2>
+		<div>
+			<h2 className="mb-2 text-h2">{countryOffers.name}</h2>
 			{countryOffers?.offers?.map((countryOffer: OfferCategory) => (
 				<CategoryOffers
 					key={countryOffer.name}
