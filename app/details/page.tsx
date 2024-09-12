@@ -7,7 +7,7 @@ import { SearchParams } from "@/utils/types"
 const DetailsPage = ({ searchParams }: { searchParams: SearchParams }) => {
 	return (
 		<>
-			<div className="container mx-auto mt-10 max-w-7xl text-white">
+			<div className="container mx-4 mt-5 max-w-7xl text-white md:mx-auto md:mt-10">
 				<TitleDetails
 					type={searchParams.type}
 					locale={searchParams.locale}

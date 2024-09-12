@@ -25,12 +25,12 @@ const TitleDetails = async ({
 	const titleCredits = credits.join(", ").replace(/,([^,]*)$/, " and$1")
 
 	return (
-		<div className="flex">
+		<div className="flex flex-col md:flex-row">
 			<Backdrop
 				id={getRandomBackdropID(title.backdrops)}
 				slug={`${title.slug}.webp`}
 			/>
-			<div className="mr-4 w-1/4">
+			<div className="mb-10 mr-4 w-full md:mb-0 md:w-1/4">
 				<Image
 					src={title.poster}
 					width="592"
@@ -40,7 +40,7 @@ const TitleDetails = async ({
 				/>
 			</div>
 
-			<div className="w-3/4">
+			<div className="w-full md:w-3/4">
 				<Link
 					href={traktURL.href}
 					target="_blank"

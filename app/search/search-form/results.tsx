@@ -16,7 +16,7 @@ const SearchResults = ({
 	}
 
 	return (
-		<section className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+		<section className="mt-20 p-4 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
 			{searchResults?.map((result: SearchResult) => (
 				<Card
 					key={result.id}

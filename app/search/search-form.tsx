@@ -53,7 +53,7 @@ const SearchForm = ({ countries }: { countries: Array<Country> }) => {
 	return (
 		<>
 			<form onSubmit={handleSubmit}>
-				<div className="mt-20 flex w-auto justify-center">
+				<div className="mt-20 flex w-auto flex-col justify-center sm:flex-row">
 					<div className="m-5">
 						<LocaleSelect
 							countries={countries}
@@ -62,7 +62,7 @@ const SearchForm = ({ countries }: { countries: Array<Country> }) => {
 						/>
 					</div>
 
-					<div className="m-5 w-1/3">
+					<div className="m-5 md:w-1/3 sm:w-auto">
 						<SearchInput
 							searchQuery={searchQuery}
 							setSearchQuery={setSearchQuery}
