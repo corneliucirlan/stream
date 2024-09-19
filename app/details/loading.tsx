@@ -16,7 +16,7 @@ const Loading: FC = () => (
 	<>
 		<div className="fixed inset-x-0 inset-y-0 -z-10 bg-black"></div>
 		<div className="flex h-svh bg-black">
-			<div className="container mx-4 mt-5 max-w-7xl md:mt-10">
+			<div className="container mx-4 mt-5 max-w-7xl md:mx-auto md:mt-10">
 				<div className="flex flex-col md:flex-row">
 					<div className="mb-10 mr-4 w-full md:mb-0 md:w-1/4">
 						<PulseDiv className="aspect-7/10 w-full" />
