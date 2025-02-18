@@ -1,7 +1,7 @@
 "use server"
 
 import { JUSTWATCH_IMAGE_URL } from "@/utils/fetch/fetch-globals"
-import { SearchResult } from "@/utils/types"
+import { SearchResult } from "@/globals/types"
 import { getPhotoID } from "@/utils/photo"
 import { initBrowser } from "../puppeteer"
 import querySearch from "../query/query-search"

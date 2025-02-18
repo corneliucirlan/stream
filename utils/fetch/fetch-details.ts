@@ -1,6 +1,6 @@
 "use server"
 
-import { Details } from "@/utils/types"
+import { Details } from "@/globals/types"
 import { getPhotoID } from "@/utils/photo"
 import { initBrowser } from "../puppeteer"
 import queryTitleDetails from "../query/query-details"

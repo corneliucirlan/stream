@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
-import { SearchResult } from "@/utils/types"
+
+import { SearchResult } from "@/globals/types"
 
 const Card = ({
 	id,

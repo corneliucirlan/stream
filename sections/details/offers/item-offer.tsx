@@ -1,4 +1,4 @@
-import { OfferItem } from "@/utils/types"
+import { OfferItem } from "@/globals/types"
 import Image from "next/image"
 import Link from "next/link"
 import { getPhotoID } from "@/utils/photo"

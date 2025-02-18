@@ -2,17 +2,19 @@
 
 import { useEffect, useState } from "react"
 import { useSessionStorage } from "usehooks-ts"
-import { Country, SearchResult } from "@/utils/types"
+
 import {
 	QUERY_KEY,
 	LOCALE_KEY,
 	DEFAULT_LOCALE,
 	RESULTS_KEY
-} from "@/utils/globals"
+} from "@/globals/vars"
+import { Country, SearchResult } from "@/globals/types"
 import fetchData from "@/utils/fetch/fetch-query"
-import SearchResults from "@/app/search/search-form/results"
-import LocaleSelect from "@/app/search/search-form/locale"
-import SearchInput from "@/app/search/search-form/input"
+
+import LocaleSelect from "@/sections/home/search-form/locale"
+import SearchInput from "@/sections/home/search-form/input"
+import SearchResults from "@/sections/home/search-form/results"
 
 const SearchForm = ({ countries }: { countries: Array<Country> }) => {
 	const [searchLocale, setSearchLocale] = useSessionStorage(
@@ -62,7 +64,7 @@ const SearchForm = ({ countries }: { countries: Array<Country> }) => {
 						/>
 					</div>
 
-					<div className="m-5 md:w-1/3 sm:w-auto">
+					<div className="m-5 sm:w-auto md:w-1/3">
 						<SearchInput
 							searchQuery={searchQuery}
 							setSearchQuery={setSearchQuery}

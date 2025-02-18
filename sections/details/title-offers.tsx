@@ -1,5 +1,6 @@
 import fetchOffersByTitle from "@/utils/fetch/fetch-offers"
-import CountryOffers from "./offers/country-offers"
+
+import CountryOffers from "@/sections/details/offers/country-offers"
 
 const Offers = async ({ id, type }: { id: number; type: string }) => {
 	const offers = await fetchOffersByTitle(id, type)

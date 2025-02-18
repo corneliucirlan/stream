@@ -1,11 +1,12 @@
 import Link from "next/link"
 import Image from "next/image"
+
+import Backdrop from "@/globals/components/backdrop"
 import { getRandomBackdropID } from "@/utils/photo"
-import Backdrop from "@/components/backdrop"
 import fetchTitleDetails from "@/utils/fetch/fetch-details"
 import getTraktUrl from "@/utils/trakt"
 
-const TitleDetails = async ({
+const TitleInfo = async ({
 	type,
 	locale,
 	fullPath
@@ -78,4 +79,4 @@ const TitleDetails = async ({
 	)
 }
 
-export default TitleDetails
+export default TitleInfo

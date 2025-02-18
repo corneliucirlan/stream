@@ -1,6 +1,6 @@
 "use server"
 
-import { BackdropType } from "@/utils/types"
+import { BackdropType } from "@/globals/types"
 import { getRandomBackdropID } from "@/utils/photo"
 import { initBrowser } from "../puppeteer"
 import queryHomepage from "@/utils/query/query-homepage"

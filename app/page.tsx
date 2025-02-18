@@ -1,7 +1,9 @@
-import Backdrop from "@/components/backdrop"
+import Backdrop from "@/globals/components/backdrop"
+
 import fetchCountries from "@/utils/fetch/fetch-countries"
 import fetchHomepagePhoto from "@/utils/fetch/fetch-homepage"
-import SearchForm from "@/app/search/search-form"
+
+import SearchForm from "@/sections/home/search-form"
 
 const Home = async () => {
 	const { id, slug } = await fetchHomepagePhoto()

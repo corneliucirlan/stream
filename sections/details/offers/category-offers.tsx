@@ -1,5 +1,6 @@
-import ItemOffer from "@/app/details/offers/item-offer"
-import { OfferCategory, OfferItem } from "@/utils/types"
+import { OfferCategory, OfferItem } from "@/globals/types"
+
+import ItemOffer from "@/sections/details/offers/item-offer"
 
 const CategoryOffers = ({
 	categoryOffers

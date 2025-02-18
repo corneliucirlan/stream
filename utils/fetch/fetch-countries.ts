@@ -1,4 +1,4 @@
-import { Country } from "@/utils/types"
+import { Country } from "@/globals/types"
 import { JUSTWATCH_BASE_URL } from "@/utils/fetch/fetch-globals"
 
 // Get a list of all available countries for streaming

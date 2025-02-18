@@ -1,5 +1,10 @@
 import { fetchOptions, JUSTWATCH_GRAPH_URL } from "@/utils/fetch/fetch-globals"
-import { OfferCountry, OfferCategory, OfferItem, Country } from "@/utils/types"
+import {
+	OfferCountry,
+	OfferCategory,
+	OfferItem,
+	Country
+} from "@/globals/types"
 import fetchCountries from "./fetch-countries"
 import { getOffersByCountry } from "../puppeteer"
 
