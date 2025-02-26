@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "dotenv": "^16.4.7",
     "next": "^15.0.1",
     "puppeteer": "^21.5.0",
     "react": "^19.0.0-rc-cae764ce-20241025",
