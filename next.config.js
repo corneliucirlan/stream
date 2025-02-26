@@ -4,7 +4,7 @@ const nextConfig = {
 	images: {
 		remotePatterns: [
 			{
-				hostname: "images.justwatch.com"
+				hostname: "image.tmdb.org"
 			}
 		]
 	}

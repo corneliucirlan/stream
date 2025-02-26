@@ -3,29 +3,10 @@ import Image from "next/image"
 
 import { SearchResult } from "@/globals/types"
 
-const Card = ({
-	id,
-	title,
-	type,
-	fullPath,
-	poster,
-	locale,
-	releaseYear
-}: SearchResult) => {
+const Card = ({ id, title, type, poster, year }: SearchResult) => {
 	return (
-		// <article className="col-6 col-md-2 card">
 		<article className="relative">
-			<Link
-				href={{
-					pathname: "/details",
-					query: {
-						fullPath: fullPath,
-						id: id,
-						type: type,
-						locale: locale
-					}
-				}}
-			>
+			<Link href={`/details/${type}/${id}`}>
 				<div className={`skeleton`}>
 					<Image src={poster} width="592" height="841" alt={title} />
 				</div>
@@ -33,7 +14,7 @@ const Card = ({
 					<div className="absolute bottom-2 left-2 text-white">
 						<h6 className="card-title">{title}</h6>
 						<span className="card-details">
-							{type} / {releaseYear}
+							{type.toUpperCase()} / {year?.slice(0, 4)}
 						</span>
 					</div>
 				</div>

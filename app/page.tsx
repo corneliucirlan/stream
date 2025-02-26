@@ -1,19 +1,19 @@
 import Backdrop from "@/globals/components/backdrop"
 
-import fetchCountries from "@/utils/fetch/fetch-countries"
-import fetchHomepagePhoto from "@/utils/fetch/fetch-homepage"
+import homepageBackdrop from "@/utils/tmdb/homepage-backdrop"
 
-import SearchForm from "@/sections/home/search-form"
+import SearchQuery from "@/sections/home/search-query"
+import SearchResults from "@/sections/home/search-results"
 
 const Home = async () => {
-	const { id, slug } = await fetchHomepagePhoto()
-	const countries = await fetchCountries()
-
+	const image: string | undefined = await homepageBackdrop()
 	return (
 		<div className="container mx-auto max-w-7xl">
-			<Backdrop id={id} slug={slug} />
+			{image && <Backdrop image={image} />}
 
-			<SearchForm countries={countries} />
+			<SearchQuery />
+
+			<SearchResults />
 		</div>
 	)
 }
