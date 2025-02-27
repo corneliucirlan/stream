@@ -9,18 +9,9 @@ const DetailsPage = async ({
 }) => {
 	const { id, type } = await params
 
-	// let response = await fetch(
-	// 	`https://api.themoviedb.org/3/movie/550?api_key=${process.env.TMDB_API}`
-	// )
-	// let x = await response.json()
-	// console.log("API: ", x)
-	// response = await fetch(`${baseURL}/movie/550`, baseOptions)
-	// x = await response.json()
-	// console.log("API 2: ", x)
-
 	return (
 		<>
-			<span className="fixed right-5 top-5 text-white opacity-25">
+			<span className="fixed right-5 top-5 bg-black text-white opacity-25">
 				Provided by{" "}
 				<a
 					href="https://www.justwatch.com"
