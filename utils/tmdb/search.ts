@@ -23,14 +23,16 @@ export default async (query: string): Promise<SearchResult[] | undefined> => {
 
 	if (!data || !data.results) return undefined
 
-	return data.results.map((result: any) => ({
+	// Filter "person" type results
+	const filteredResults = data.results.filter(
+		(result: any) => result.media_type !== "person"
+	)
+
+	return filteredResults.map((result: any) => ({
 		id: result.id,
 		title: result.media_type === "movie" ? result.title : result.name,
 		type: result.media_type,
-		poster:
-			result.media_type === "person"
-				? result.profile_path
-				: result.poster_path,
+		poster: result.poster_path,
 		year:
 			result.media_type === "tv"
 				? result.first_air_date
