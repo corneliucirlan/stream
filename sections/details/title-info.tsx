@@ -1,6 +1,5 @@
 import Image from "next/image"
 
-import Backdrop from "@/globals/components/backdrop"
 import { baseURLImage, createApiRequest } from "@/utils/tmdb/tmdb-api"
 import { TitleDetails, TitleCredits } from "@/globals/types"
 
@@ -13,11 +12,9 @@ const TitleInfo = async ({ type, id }: { type: string; id: number }) => {
 		.slice(0, 30)
 		.map((cast: any) => cast.name)
 		.join(", ")
-	const backdrop: string | null | undefined = titleDetails?.backdrop_path
 
 	return (
 		<div className="flex flex-col md:flex-row">
-			{backdrop && <Backdrop image={backdrop} />}
 			<div className="mb-10 mr-4 w-full md:mb-0 md:w-1/4">
 				<Image
 					src={baseURLImage + titleDetails?.poster_path}

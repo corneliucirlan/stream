@@ -99,3 +99,15 @@ export type TitleCredits = {
 	id: number
 	cast: CastMember[]
 }
+
+export type ImagesObject = {
+	[key: string]: Array<{
+		aspect_ratio: number
+		file_path: string
+		height: number
+		width: number
+		iso_639_1: number | null
+		vote_average: number
+		vote_count: number
+	}>
+}
