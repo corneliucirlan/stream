@@ -6,6 +6,7 @@ export default async ({ id, type }: { id: number; type: string }) => {
 	const countries: Array<Country> | undefined = await createApiRequest(
 		"/configuration/countries"
 	)
+	countries?.sort((a, b) => a.english_name.localeCompare(b.english_name))
 
 	const rawData: RawOffers | undefined = await createApiRequest(
 		`/${type}/${id}/watch/providers`
