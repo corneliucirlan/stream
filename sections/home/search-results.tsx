@@ -16,7 +16,7 @@ export default () => {
 		SearchResult[] | undefined
 	>(RESULTS_KEY, undefined)
 	const [isLoading, setISLoading] = useState(false)
-	const [hasMounted, setHasMounted] = useState(false) // Add this state
+	const [hasMounted, setHasMounted] = useState(false)
 
 	useEffect(() => {
 		// Set to true after the initial render

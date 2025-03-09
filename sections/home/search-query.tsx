@@ -7,7 +7,7 @@ export default () => {
 	const [query, setQuery] = useSessionStorage<string>(QUERY_KEY, "")
 
 	return (
-		<div className="mt-20 w-1/2 m-auto">
+		<div className="m-auto mt-20 w-1/2">
 			<input
 				type="text"
 				className="focus:shadow-outline w-full appearance-none rounded border px-5 py-3 leading-tight text-gray-700 shadow focus:outline-none"

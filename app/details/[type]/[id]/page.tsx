@@ -33,7 +33,7 @@ const DetailsPage = async ({
 	return (
 		<>
 			{backdrop && <Backdrop image={backdrop} />}
-			<span className="fixed right-5 top-5 bg-black text-white opacity-25">
+			<span className="fixed right-5 bottom-2 bg-black text-white opacity-25">
 				Provided by{" "}
 				<a
 					href="https://www.justwatch.com"
