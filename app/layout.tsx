@@ -1,5 +1,5 @@
 // Tailwind CSS
-import "./style.sass"
+import "./style.css"
 
 // Metadata
 import type { Metadata } from "next"

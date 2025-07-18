@@ -10,7 +10,7 @@ import search from "@/utils/tmdb/search"
 import Card from "./search/card"
 import { baseURLImage } from "@/utils/tmdb/tmdb-api"
 
-export default () => {
+const SearchResults = () => {
 	const [searchQuery] = useSessionStorage(QUERY_KEY, undefined)
 	const [searchResults, setSearchResults] = useSessionStorage<
 		SearchResult[] | undefined
@@ -37,7 +37,7 @@ export default () => {
 					}
 				})
 		}
-	}, [searchQuery])
+	}, [searchQuery, setSearchResults])
 
 	if (!hasMounted) return
 
@@ -66,3 +66,5 @@ export default () => {
 		</section>
 	)
 }
+
+export default SearchResults

@@ -8,7 +8,7 @@ interface PulseDivProps {
 const PulseDiv: FC<PulseDivProps> = ({ className, style }) => (
 	<div
 		style={style}
-		className={`animate-pulse rounded-md bg-white bg-opacity-20 ${className}`}
+		className={`animate-pulse rounded-md bg-white/20 ${className}`}
 	/>
 )
 
@@ -51,7 +51,7 @@ const Loading: FC = () => (
 				</div>
 
 				<div className="container mx-auto mt-20 max-w-7xl">
-					<div className="mb-8 rounded-xl bg-white bg-opacity-5 p-12 pb-4">
+					<div className="mb-8 rounded-xl bg-white/5 p-12 pb-4">
 						<PulseDiv className="mt-8 h-8 w-1/3 md:w-1/4" />
 						{Array(4)
 							.fill(0)

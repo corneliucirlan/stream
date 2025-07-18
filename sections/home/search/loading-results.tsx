@@ -5,7 +5,7 @@ const LoadingResults = () => (
 			.map((_, index) => (
 				<div
 					key={index}
-					className="aspect-7/10 w-full animate-pulse rounded-md bg-white bg-opacity-15"
+					className="aspect-7/10 w-full animate-pulse rounded-md bg-white/15"
 				>
 					<div className="skeleton skeleton-card" />
 				</div>

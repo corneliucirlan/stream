@@ -2,7 +2,7 @@ import { Country, CountryProviders, RawOffers } from "@/globals/types"
 import CountryWatchProviders from "@/sections/details/watch/country"
 import { createApiRequest } from "@/utils/tmdb/tmdb-api"
 
-export default async ({ id, type }: { id: number; type: string }) => {
+const TitleOffers = async ({ id, type }: { id: number; type: string }) => {
 	const countries: Array<Country> | undefined = await createApiRequest(
 		"/configuration/countries"
 	)
@@ -43,3 +43,5 @@ export default async ({ id, type }: { id: number; type: string }) => {
 		</div>
 	)
 }
+
+export default TitleOffers

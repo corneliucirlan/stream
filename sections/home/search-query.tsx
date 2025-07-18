@@ -3,14 +3,14 @@
 import { useSessionStorage } from "usehooks-ts"
 import { QUERY_KEY } from "@/globals/vars"
 
-export default () => {
+const SearchQuery = () => {
 	const [query, setQuery] = useSessionStorage<string>(QUERY_KEY, "")
 
 	return (
 		<div className="m-auto mt-20 w-1/2">
 			<input
 				type="text"
-				className="focus:shadow-outline w-full appearance-none rounded border px-5 py-3 leading-tight text-gray-700 shadow focus:outline-none"
+				className="focus:shadow-outline border-0` w-full rounded bg-white p-3 px-5 py-3 text-gray-700 outline-0 focus:outline-none"
 				onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
 					setQuery(event.target.value)
 				}
@@ -21,3 +21,5 @@ export default () => {
 		</div>
 	)
 }
+
+export default SearchQuery
