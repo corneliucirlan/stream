@@ -19,31 +19,40 @@ const SearchResults = () => {
 	const [hasMounted, setHasMounted] = useState(false)
 
 	useEffect(() => {
-		// Set to true after the initial render
+		let isCancelled = false
 		setHasMounted(true)
 
-		if (!searchQuery) {
+		if (searchQuery === undefined) return
+
+		// 👇 NEW FIX: handle empty string (input cleared)
+		if (searchQuery === "") {
 			setSearchResults(undefined)
+			setISLoading(false)
 			return
 		}
 
-		if (searchQuery !== undefined && searchQuery !== "") {
+		const doSearch = async () => {
+			setSearchResults(undefined)
 			setISLoading(true)
-			search(searchQuery) // Pass the signal to the search function
-				.then(result => {
-					if (result) {
-						setSearchResults(result)
-						setISLoading(false)
-					}
-				})
+
+			const result = await search(searchQuery)
+
+			if (!isCancelled) {
+				setSearchResults(result || [])
+				setISLoading(false)
+			}
+		}
+
+		doSearch()
+
+		return () => {
+			isCancelled = true
 		}
 	}, [searchQuery, setSearchResults])
 
-	if (!hasMounted) return
+	if (!hasMounted) return null
 
-	if (!searchResults && isLoading === true) {
-		return <LoadingResults />
-	}
+	if (isLoading && searchResults === undefined) return <LoadingResults />
 
 	if (!searchResults) {
 		return (
