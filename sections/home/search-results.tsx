@@ -10,70 +10,111 @@ import search from "@/utils/tmdb/search"
 import Card from "./search/card"
 import { baseURLImage } from "@/utils/tmdb/tmdb-api"
 
+const DEBOUNCE_MS = 100 // 0.1 seconds debounce
+
 const SearchResults = () => {
-	const [searchQuery] = useSessionStorage(QUERY_KEY, undefined)
-	const [searchResults, setSearchResults] = useSessionStorage<
-		SearchResult[] | undefined
+	const [searchQuery] = useSessionStorage<string | undefined>(
+		QUERY_KEY,
+		undefined
+	)
+
+	const [cached, setCached] = useSessionStorage<
+		| {
+				query: string
+				results: SearchResult[]
+		  }
+		| undefined
 	>(RESULTS_KEY, undefined)
-	const [isLoading, setISLoading] = useState(false)
-	const [hasMounted, setHasMounted] = useState(false)
+
+	const [results, setResults] = useState<SearchResult[] | undefined>(
+		undefined
+	)
+	const [isLoading, setIsLoading] = useState(false)
+	const [mounted, setMounted] = useState(false)
+	const [debouncedQuery, setDebouncedQuery] = useState<string | undefined>(
+		searchQuery
+	)
+
+	// Mounting check
+	useEffect(() => {
+		setMounted(true)
+	}, [])
+
+	// Debounce input
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			setDebouncedQuery(searchQuery)
+		}, DEBOUNCE_MS)
+
+		return () => clearTimeout(handler)
+	}, [searchQuery])
 
 	useEffect(() => {
-		let isCancelled = false
-		setHasMounted(true)
+		if (!mounted || debouncedQuery === undefined) return
 
-		if (searchQuery === undefined) return
+		let cancelled = false
 
-		// handle empty string
-		if (searchQuery === "") {
-			setSearchResults(undefined)
-			setISLoading(false)
+		// Handle empty input
+		if (debouncedQuery.trim() === "") {
+			setResults(undefined)
+			setCached(undefined)
 			return
 		}
 
-		// ✅ If results already exist in sessionStorage, DO NOT re-search
-		if (searchResults && searchResults.length > 0) return
+		// Use cached results if they match the current query
+		if (cached && cached.query === debouncedQuery) {
+			setResults(cached.results)
+			return
+		}
 
 		const doSearch = async () => {
-			setISLoading(true)
+			setIsLoading(true)
 
-			const result = await search(searchQuery)
+			const data = await search(debouncedQuery)
 
-			if (!isCancelled) {
-				setSearchResults(result || [])
-				setISLoading(false)
+			if (!cancelled) {
+				const finalResults = data ?? []
+				setResults(finalResults)
+				setCached({ query: debouncedQuery, results: finalResults })
+				setIsLoading(false)
 			}
 		}
 
 		doSearch()
 
 		return () => {
-			isCancelled = true
+			cancelled = true
 		}
-	}, [searchQuery])
+	}, [debouncedQuery, mounted])
 
-	if (!hasMounted) return null
-
-	if (isLoading && searchResults === undefined) return <LoadingResults />
-
-	if (!searchResults) {
-		return (
-			<section className="mt-20 grid grid-cols-1 gap-8 p-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"></section>
-		)
-	}
+	if (!mounted) return null
 
 	return (
-		<section className="mt-20 grid grid-cols-1 gap-8 p-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
-			{searchResults.map((result: SearchResult) => (
-				<Card
-					key={result.id}
-					id={result.id}
-					title={result.title}
-					type={result.type}
-					poster={`${baseURLImage}/${result.poster}`}
-					year={result.year}
-				/>
-			))}
+		<section className="relative mt-20 grid grid-cols-1 gap-8 p-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+			{results && results.length > 0
+				? results.map(result => (
+						<Card
+							key={result.id}
+							id={result.id}
+							title={result.title}
+							type={result.type}
+							poster={`${baseURLImage}/${result.poster}`}
+							year={result.year}
+						/>
+					))
+				: !isLoading &&
+					debouncedQuery?.trim() !== "" && (
+						<div className="col-span-full mt-10 text-center text-gray-400">
+							No results found for "{debouncedQuery}"
+						</div>
+					)}
+
+			{/* Loading overlay */}
+			{isLoading && (
+				<div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40">
+					<LoadingResults />
+				</div>
+			)}
 		</section>
 	)
 }
