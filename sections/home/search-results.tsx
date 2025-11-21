@@ -86,31 +86,29 @@ const SearchResults = () => {
 	const hasQuery = !!debouncedQuery?.trim()
 
 	return (
-		<section className="relative mt-20 grid grid-cols-1 gap-8 p-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
-			{/* Render results */}
-			{results && results.length > 0 ? (
-				results.map(result => (
-					<Card
-						key={result.id}
-						id={result.id}
-						title={result.title}
-						type={result.type}
-						poster={`${baseURLImage}/${result.poster}`}
-						year={result.year}
-					/>
-				))
-			) : !isLoading && hasQuery ? (
-				<div className="col-span-full mt-10 text-center text-gray-400">
-					No results found for "{debouncedQuery}"
-				</div>
-			) : null}
+		<section className="relative mt-20 p-4">
+			{/* Results grid */}
+			<div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+				{results && results.length > 0 ? (
+					results.map(result => (
+						<Card
+							key={result.id}
+							id={result.id}
+							title={result.title}
+							type={result.type}
+							poster={`${baseURLImage}/${result.poster}`}
+							year={result.year}
+						/>
+					))
+				) : !isLoading && hasQuery ? (
+					<div className="col-span-full mt-10 text-center text-gray-400">
+						No results found for "{debouncedQuery}"
+					</div>
+				) : null}
+			</div>
 
 			{/* Loading overlay */}
-			{isLoading && (
-				<div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40">
-					<LoadingResults />
-				</div>
-			)}
+			{isLoading && <LoadingResults />}
 		</section>
 	)
 }
