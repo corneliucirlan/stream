@@ -24,15 +24,17 @@ const SearchResults = () => {
 
 		if (searchQuery === undefined) return
 
-		// 👇 NEW FIX: handle empty string (input cleared)
+		// handle empty string
 		if (searchQuery === "") {
 			setSearchResults(undefined)
 			setISLoading(false)
 			return
 		}
 
+		// ✅ If results already exist in sessionStorage, DO NOT re-search
+		if (searchResults && searchResults.length > 0) return
+
 		const doSearch = async () => {
-			setSearchResults(undefined)
 			setISLoading(true)
 
 			const result = await search(searchQuery)
@@ -48,7 +50,7 @@ const SearchResults = () => {
 		return () => {
 			isCancelled = true
 		}
-	}, [searchQuery, setSearchResults])
+	}, [searchQuery])
 
 	if (!hasMounted) return null
 
