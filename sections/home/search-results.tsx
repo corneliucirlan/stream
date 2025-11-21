@@ -19,28 +19,20 @@ const SearchResults = () => {
 	)
 
 	const [cached, setCached] = useSessionStorage<
-		| {
-				query: string
-				results: SearchResult[]
-		  }
-		| undefined
+		{ query: string; results: SearchResult[] } | undefined
 	>(RESULTS_KEY, undefined)
 
-	const [results, setResults] = useState<SearchResult[] | undefined>(
-		undefined
-	)
+	const [results, setResults] = useState<SearchResult[] | undefined>()
 	const [isLoading, setIsLoading] = useState(false)
 	const [mounted, setMounted] = useState(false)
-	const [debouncedQuery, setDebouncedQuery] = useState<string | undefined>(
-		searchQuery
-	)
+	const [debouncedQuery, setDebouncedQuery] = useState<string | undefined>()
 
-	// Mounting check
+	// Only render after mount (avoids SSR issues)
 	useEffect(() => {
 		setMounted(true)
 	}, [])
 
-	// Debounce input
+	// Debounce the search query
 	useEffect(() => {
 		const handler = setTimeout(() => {
 			setDebouncedQuery(searchQuery)
@@ -49,34 +41,36 @@ const SearchResults = () => {
 		return () => clearTimeout(handler)
 	}, [searchQuery])
 
+	// Perform search when debounced query changes
 	useEffect(() => {
-		if (!mounted || debouncedQuery === undefined) return
+		if (!mounted) return
 
-		let cancelled = false
-
-		// Handle empty input
-		if (debouncedQuery.trim() === "") {
+		const query = debouncedQuery?.trim()
+		if (!query) {
+			// Clear results if query is empty
 			setResults(undefined)
 			setCached(undefined)
 			return
 		}
 
-		// Use cached results if they match the current query
-		if (cached && cached.query === debouncedQuery) {
+		// Use cache if it matches current query
+		if (cached?.query === query) {
 			setResults(cached.results)
 			return
 		}
 
+		let cancelled = false
 		const doSearch = async () => {
 			setIsLoading(true)
-
-			const data = await search(debouncedQuery)
-
-			if (!cancelled) {
-				const finalResults = data ?? []
-				setResults(finalResults)
-				setCached({ query: debouncedQuery, results: finalResults })
-				setIsLoading(false)
+			try {
+				const data = await search(query)
+				if (!cancelled) {
+					const finalResults = data ?? []
+					setResults(finalResults)
+					setCached({ query, results: finalResults })
+				}
+			} finally {
+				if (!cancelled) setIsLoading(false)
 			}
 		}
 
@@ -85,29 +79,31 @@ const SearchResults = () => {
 		return () => {
 			cancelled = true
 		}
-	}, [debouncedQuery, mounted])
+	}, [debouncedQuery, cached, mounted, setCached])
 
 	if (!mounted) return null
 
+	const hasQuery = debouncedQuery?.trim().length > 0
+
 	return (
 		<section className="relative mt-20 grid grid-cols-1 gap-8 p-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
-			{results && results.length > 0
-				? results.map(result => (
-						<Card
-							key={result.id}
-							id={result.id}
-							title={result.title}
-							type={result.type}
-							poster={`${baseURLImage}/${result.poster}`}
-							year={result.year}
-						/>
-					))
-				: !isLoading &&
-					debouncedQuery?.trim() !== "" && (
-						<div className="col-span-full mt-10 text-center text-gray-400">
-							No results found for "{debouncedQuery}"
-						</div>
-					)}
+			{/* Render results */}
+			{results && results.length > 0 ? (
+				results.map(result => (
+					<Card
+						key={result.id}
+						id={result.id}
+						title={result.title}
+						type={result.type}
+						poster={`${baseURLImage}/${result.poster}`}
+						year={result.year}
+					/>
+				))
+			) : !isLoading && hasQuery ? (
+				<div className="col-span-full mt-10 text-center text-gray-400">
+					No results found for "{debouncedQuery}"
+				</div>
+			) : null}
 
 			{/* Loading overlay */}
 			{isLoading && (
