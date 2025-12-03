@@ -11,6 +11,7 @@ const TitleOffers = async ({ id, type }: { id: number; type: string }) => {
 	const rawData: RawOffers | undefined = await createApiRequest(
 		`/${type}/${id}/watch/providers`
 	)
+	console.log("rawData:", rawData)
 
 	const titleProviders =
 		rawData &&
@@ -22,6 +23,7 @@ const TitleOffers = async ({ id, type }: { id: number; type: string }) => {
 			},
 			{} as Record<string, CountryProviders>
 		)
+	console.log("titleProviders:", titleProviders)
 
 	return (
 		<div className="mt-20">
