@@ -9,6 +9,7 @@ export const createApiRequest = async <T>(
 	try {
 		const url = new URL(`${baseURL}${endpoint}`)
 		url.searchParams.append("api_key", `${process.env.TMDB_API_KEY}`)
+
 		if (params) {
 			Object.entries(params).forEach(([key, value]) => {
 				url.searchParams.append(key, value)
@@ -17,9 +18,7 @@ export const createApiRequest = async <T>(
 
 		const response = await fetch(url.toString(), {
 			method,
-			headers: {
-				accept: "application/json"
-			}
+			headers: { accept: "application/json" }
 		})
 
 		if (!response.ok) {
@@ -29,7 +28,24 @@ export const createApiRequest = async <T>(
 			return undefined
 		}
 
-		return await response.json()
+		// Defensive: check for empty body
+		const text = await response.text()
+		if (!text.trim()) {
+			console.warn(
+				`TMDB returned empty or whitespace response for ${endpoint}`
+			)
+			return undefined
+		}
+
+		try {
+			return JSON.parse(text) as T
+		} catch (err) {
+			console.error(
+				`Failed to parse JSON for ${endpoint}. Response:`,
+				text
+			)
+			return undefined
+		}
 	} catch (error) {
 		console.error(`Error fetching TMDB API (${endpoint}):`, error)
 		return undefined

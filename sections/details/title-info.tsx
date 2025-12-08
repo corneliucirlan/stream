@@ -9,28 +9,34 @@ const TitleInfo = async ({ type, id }: { type: string; id: number }) => {
 	const titleDetails: TitleDetails | undefined =
 		await createApiRequest<TitleDetails>(`/${type}/${id}`)
 
-	console.log("titleDetails: ", titleDetails)
-
 	const titleCredits: TitleCredits | undefined =
 		await createApiRequest<TitleCredits>(`/${type}/${id}/credits`)
-	console.log("titleCredits: ", titleCredits)
 
 	const titleCast = titleCredits?.cast
 		.slice(0, 30)
 		.map(cast => cast.name)
 		.join(", ")
-	console.log("titleCast: ", titleCast)
 
-	const traktURL: string | null = titleDetails?.imdb_id
-		? await getTraktUrl(titleDetails.imdb_id, type)
-		: null
-	console.log("traktURL: ", traktURL)
+	let traktURL: string | null = null
+	try {
+		if (titleDetails?.imdb_id) {
+			traktURL = await getTraktUrl(titleDetails.imdb_id, type)
+		}
+	} catch (err) {
+		console.error("Failed to fetch Trakt URL:", err)
+		traktURL = null
+	}
 
 	return (
 		<div className="flex flex-col md:flex-row">
 			<div className="mr-4 mb-10 w-full md:mb-0 md:w-1/4">
 				<Image
-					src={baseURLImage + titleDetails?.poster_path}
+					src={
+						titleDetails?.poster_path
+							? baseURLImage + titleDetails.poster_path
+							: "/placeholder.jpg"
+					}
+					// src={baseURLImage + titleDetails?.poster_path}
 					width="592"
 					height="841"
 					alt={

@@ -1,25 +1,43 @@
 "use client"
 
-import { useSessionStorage } from "usehooks-ts"
-import { QUERY_KEY } from "@/globals/vars"
+import { useState, useEffect, useRef } from "react"
 
-const SearchQuery = () => {
-	const [query, setQuery] = useSessionStorage<string>(QUERY_KEY, "")
+const DEBOUNCE_MS = 150
+
+export default function SearchQuery({
+	onSearch,
+	initialValue = ""
+}: {
+	onSearch: (query: string) => void
+	initialValue?: string
+}) {
+	const [value, setValue] = useState(initialValue)
+	const firstRender = useRef(true)
+
+	useEffect(() => {
+		// Skip initial search triggered by hydration
+		if (firstRender.current) {
+			firstRender.current = false
+			return
+		}
+
+		const handler = setTimeout(() => {
+			onSearch(value)
+		}, DEBOUNCE_MS)
+
+		return () => clearTimeout(handler)
+	}, [value, onSearch])
 
 	return (
 		<div className="m-auto mt-20 w-1/2">
 			<input
 				type="text"
-				className="focus:shadow-outline border-0` w-full rounded bg-white p-3 px-5 py-3 text-gray-700 outline-0 focus:outline-none"
-				onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-					setQuery(event.target.value)
-				}
-				value={query}
-				placeholder="Search for a movie or tv show"
-				autoFocus={true}
+				className="w-full rounded bg-white p-3 px-5 py-3 text-gray-700 outline-none"
+				onChange={e => setValue(e.target.value)}
+				value={value}
+				placeholder="Search for a movie or TV show"
+				autoFocus
 			/>
 		</div>
 	)
 }
-
-export default SearchQuery

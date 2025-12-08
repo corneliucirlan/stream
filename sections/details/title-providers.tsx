@@ -3,45 +3,53 @@ import CountryWatchProviders from "@/sections/details/watch/country"
 import { createApiRequest } from "@/utils/tmdb/tmdb-api"
 
 const TitleOffers = async ({ id, type }: { id: number; type: string }) => {
-	const countries: Array<Country> | undefined = await createApiRequest(
+	// Fetch countries
+	const countries = await createApiRequest<Array<Country>>(
 		"/configuration/countries"
 	)
-	countries?.sort((a, b) => a.english_name.localeCompare(b.english_name))
 
-	const rawData: RawOffers | undefined = await createApiRequest(
+	if (!countries || countries.length === 0) {
+		return <div>No country data available.</div>
+	}
+
+	// Sort countries alphabetically
+	countries.sort((a, b) => a.english_name.localeCompare(b.english_name))
+
+	// Fetch watch providers for the title
+	const rawData = await createApiRequest<RawOffers>(
 		`/${type}/${id}/watch/providers`
 	)
-	console.log("rawData:", rawData)
+	if (!rawData || !rawData.results)
+		return <div>No watch provider data available for this title.</div>
 
-	const titleProviders =
-		rawData &&
-		Object.entries(rawData.results).reduce(
-			(acc, [key, value]: [string, any]) => {
-				const { link, ...newValue } = value
-				acc[key] = newValue
-				return acc
-			},
-			{} as Record<string, CountryProviders>
-		)
-	console.log("titleProviders:", titleProviders)
+	// Transform TMDB results to a safe object without the "link" field
+	const titleProviders: Record<string, CountryProviders> = Object.entries(
+		rawData.results
+	).reduce(
+		(acc, [countryCode, value]) => {
+			if (!value) return acc
+			const { link, ...rest } = value
+			acc[countryCode] = rest
+			return acc
+		},
+		{} as Record<string, CountryProviders>
+	)
 
 	return (
 		<div className="mt-20">
-			{countries &&
-				countries.map((country: any) => {
-					if (titleProviders && titleProviders[country.iso_3166_1]) {
-						return (
-							<CountryWatchProviders
-								countryName={country.english_name}
-								key={country.iso_3166_1}
-								providersForCountry={
-									titleProviders[country.iso_3166_1]
-								}
-							/>
-						)
-					}
-					return null
-				})}
+			{countries.map(country => {
+				const providersForCountry = titleProviders[country.iso_3166_1]
+
+				if (!providersForCountry) return null
+
+				return (
+					<CountryWatchProviders
+						key={country.iso_3166_1}
+						countryName={country.english_name}
+						providersForCountry={providersForCountry}
+					/>
+				)
+			})}
 		</div>
 	)
 }

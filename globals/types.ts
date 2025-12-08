@@ -1,7 +1,7 @@
 export type SearchResult = {
 	id: number
 	title: string
-	type: string
+	type: "movie" | "tv"
 	poster: string
 	year: string
 }
