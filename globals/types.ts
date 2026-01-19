@@ -78,6 +78,12 @@ export type TitleDetails = {
 	vote_count: number
 	number_of_seasons?: number
 	first_air_date?: string
+	external_ids?: {
+		[key: string]: string | number | null | undefined
+	}
+	credits?: {
+		cast: CastMember[]
+	}
 }
 
 export type CastMember = {
@@ -95,10 +101,10 @@ export type CastMember = {
 	order: number
 }
 
-export type TitleCredits = {
-	id: number
-	cast: CastMember[]
-}
+// export type TitleCredits = {
+// 	id: number
+// 	cast: CastMember[]
+// }
 
 export type ImagesObject = {
 	[key: string]: Array<{

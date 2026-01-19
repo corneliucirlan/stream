@@ -2,30 +2,25 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { baseURLImage, createApiRequest } from "@/utils/tmdb/tmdb-api"
-import { TitleDetails, TitleCredits } from "@/globals/types"
-import getTraktUrl from "@/utils/trakt/trakt-url"
+import { TitleDetails } from "@/globals/types"
 
 const TitleInfo = async ({ type, id }: { type: string; id: number }) => {
 	const titleDetails: TitleDetails | undefined =
-		await createApiRequest<TitleDetails>(`/${type}/${id}`)
+		await createApiRequest<TitleDetails>(
+			`/${type}/${id}?append_to_response=external_ids,credits`
+		)
 
-	const titleCredits: TitleCredits | undefined =
-		await createApiRequest<TitleCredits>(`/${type}/${id}/credits`)
-
-	const titleCast = titleCredits?.cast
+	const titleCast = titleDetails?.credits?.cast
 		.slice(0, 30)
 		.map(cast => cast.name)
 		.join(", ")
 
-	let traktURL: string | null = null
-	try {
-		if (titleDetails?.imdb_id) {
-			traktURL = await getTraktUrl(titleDetails.imdb_id, type)
-		}
-	} catch (err) {
-		console.error("Failed to fetch Trakt URL:", err)
-		traktURL = null
-	}
+	const imdbBase = "https://www.imdb.com"
+	const imdbId =
+		type === "movie"
+			? titleDetails?.imdb_id
+			: titleDetails?.external_ids?.imdb_id
+	const imdbURL = imdbId ? `${imdbBase}/title/${imdbId}` : imdbBase
 
 	return (
 		<div className="flex flex-col md:flex-row">
@@ -36,7 +31,6 @@ const TitleInfo = async ({ type, id }: { type: string; id: number }) => {
 							? baseURLImage + titleDetails.poster_path
 							: "/placeholder.jpg"
 					}
-					// src={baseURLImage + titleDetails?.poster_path}
 					width="592"
 					height="841"
 					alt={
@@ -50,7 +44,7 @@ const TitleInfo = async ({ type, id }: { type: string; id: number }) => {
 
 			<div className="w-full md:w-3/4">
 				<Link
-					href={traktURL ?? "https://trakt.tv"}
+					href={imdbURL}
 					target="_blank"
 					title={`Open Trakt.tv page"`}
 				>
