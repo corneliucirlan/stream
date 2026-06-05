@@ -5,7 +5,7 @@ import TitleInfo from "@/sections/details/title-info"
 import TitleOffers from "@/sections/details/title-providers"
 import { createApiRequest } from "@/utils/tmdb/tmdb-api"
 
-const DetailsPage = async ({
+export default async ({
 	params
 }: {
 	params: Promise<{ type: string; id: number }>
@@ -13,9 +13,7 @@ const DetailsPage = async ({
 	const { type, id } = await params
 
 	const getRandomArrayIndex = (length: number) => {
-		if (!length) {
-			return null
-		}
+		if (!length) return null
 
 		const randomIndex = Math.floor(Math.random() * length)
 		return randomIndex
@@ -51,5 +49,3 @@ const DetailsPage = async ({
 		</>
 	)
 }
-
-export default DetailsPage
