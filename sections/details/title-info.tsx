@@ -29,7 +29,7 @@ const TitleInfo = async ({ type, id }: { type: string; id: number }) => {
 					src={
 						titleDetails?.poster_path
 							? baseURLImage + titleDetails.poster_path
-							: "/placeholder.jpg"
+							: "/placeholder.svg"
 					}
 					width="592"
 					height="841"

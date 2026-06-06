@@ -2,7 +2,10 @@ import { ProviderProps } from "@/globals/types"
 import Image from "next/image"
 import { baseURLImage } from "@/utils/tmdb/tmdb-api"
 
-export default ({ watch, availableSeasons = [] }: ProviderProps) => {
+export default function Provider({
+	watch,
+	availableSeasons = []
+}: ProviderProps) {
 	// Sort seasons numerically for a cleaner display
 	const sortedSeasons = [...availableSeasons].sort((a, b) => a - b)
 

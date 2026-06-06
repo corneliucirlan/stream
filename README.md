@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Global Stream
+
+Global Stream is a Next.js app for searching movies and TV shows and checking where they are available to stream, rent, buy, or watch for free across different countries.
+
+The app uses TMDB for title data, posters, backdrops, and watch-provider availability. TMDB provider data is supplied by JustWatch.
+
+## Features
+
+- Search movies and TV shows from the home page.
+- Preserve the last search in `sessionStorage` during the browser session.
+- View title details, posters, backdrop art, overview, year, status, seasons, and cast.
+- Browse watch providers by country and availability type.
+- Show season-level provider availability for TV shows.
+- Use a local placeholder when TMDB does not provide poster art.
+- Cache TMDB GET requests with a one-hour revalidation window.
+
+## Tech Stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- TMDB API
+
+## Requirements
+
+- Node.js compatible with the installed Next.js version
+- Yarn
+- A TMDB API key
+
+## Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```bash
+TMDB_API_KEY=your_tmdb_api_key
+```
+
+Optional, currently only used by the Trakt helper utility:
+
+```bash
+TRAKT_CLIENT_ID=your_trakt_client_id
+```
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run the development server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+yarn dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Starts the local development server with Turbopack.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+yarn build
+```
 
-## Deploy on Vercel
+Creates a production build.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+yarn start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Runs the production server after a successful build.
+
+```bash
+yarn lint
+```
+
+Runs ESLint against the source files.
+
+## Project Structure
+
+```text
+app/
+  api/search/                 Search API route
+  watch/[type]/[id]/          Movie and TV detail route
+globals/
+  components/                 Shared UI components
+  types.ts                    Shared TypeScript models
+sections/
+  home/                       Search input and result cards
+  details/                    Title details and provider sections
+utils/
+  tmdb/                       TMDB request/search helpers
+  trakt/                      Trakt URL helper
+public/
+  placeholder.svg             Fallback poster image
+```
+
+## Data Attribution
+
+This product uses the TMDB API but is not endorsed or certified by TMDB.
+
+Watch-provider data is provided by JustWatch through TMDB.

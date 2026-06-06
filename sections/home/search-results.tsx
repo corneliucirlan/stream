@@ -18,7 +18,7 @@ export default function SearchResults({
 	if (!results.length) {
 		return (
 			<div className="col-span-full mt-10 text-center text-gray-400">
-				No results found for "{query}"
+				No results found for &quot;{query}&quot;
 			</div>
 		)
 	}
@@ -32,7 +32,11 @@ export default function SearchResults({
 						id={result.id}
 						title={result.title}
 						type={result.type}
-						poster={`${baseURLImage}/${result.poster}`}
+						poster={
+							result.poster
+								? `${baseURLImage}${result.poster}`
+								: null
+						}
 						year={result.year}
 					/>
 				))}

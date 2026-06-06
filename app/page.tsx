@@ -17,14 +17,18 @@ export default function Home() {
 
 	// Load saved search from sessionStorage
 	useEffect(() => {
-		const saved = sessionStorage.getItem(STORAGE_KEY)
-		if (saved) {
-			const { query: savedQuery, results: savedResults } =
-				JSON.parse(saved)
-			setQuery(savedQuery)
-			setResults(savedResults)
-		}
-		setHydrated(true)
+		const timeoutId = window.setTimeout(() => {
+			const saved = sessionStorage.getItem(STORAGE_KEY)
+			if (saved) {
+				const { query: savedQuery, results: savedResults } =
+					JSON.parse(saved)
+				setQuery(savedQuery)
+				setResults(savedResults)
+			}
+			setHydrated(true)
+		}, 0)
+
+		return () => window.clearTimeout(timeoutId)
 	}, [])
 
 	const fetchResults = useCallback(

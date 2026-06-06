@@ -18,7 +18,8 @@ export const createApiRequest = async <T>(
 
 		const response = await fetch(url.toString(), {
 			method,
-			headers: { accept: "application/json" }
+			headers: { accept: "application/json" },
+			next: method === "GET" ? { revalidate: 3600 } : undefined
 		})
 
 		if (!response.ok) {
@@ -39,7 +40,7 @@ export const createApiRequest = async <T>(
 
 		try {
 			return JSON.parse(text) as T
-		} catch (err) {
+		} catch {
 			console.error(
 				`Failed to parse JSON for ${endpoint}. Response:`,
 				text

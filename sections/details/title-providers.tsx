@@ -2,9 +2,9 @@ import {
 	Country,
 	RawOffers,
 	CountryProviders,
+	SeasonProvidersByType,
 	SeasonWatchProviders,
-	TVShowDetails,
-	WatchProvider // Added import
+	TVShowDetails
 } from "@/globals/types"
 import CountryWatchProviders from "@/sections/details/watch/country"
 import { createApiRequest } from "@/utils/tmdb/tmdb-api"
@@ -33,7 +33,24 @@ const getAllSeasonsAvailability = async (seriesId: number) => {
 	}))
 }
 
-export default async ({ id, type }: { id: number; type: string }) => {
+const getProvidersOnly = (
+	availability: RawOffers["results"][string]
+): CountryProviders =>
+	Object.entries(availability).reduce<CountryProviders>(
+		(acc, [providerType, providers]) => {
+			if (Array.isArray(providers)) acc[providerType] = providers
+			return acc
+		},
+		{}
+	)
+
+export default async function TitleProviders({
+	id,
+	type
+}: {
+	id: number
+	type: string
+}) {
 	// Fetch countries
 	const countries = await createApiRequest<Array<Country>>(
 		"/configuration/countries"
@@ -59,14 +76,13 @@ export default async ({ id, type }: { id: number; type: string }) => {
 	).reduce(
 		(acc, [countryCode, value]) => {
 			if (!value) return acc
-			const { link, ...rest } = value
-			acc[countryCode] = rest as unknown as CountryProviders
+			acc[countryCode] = getProvidersOnly(value)
 			return acc
 		},
 		{} as Record<string, CountryProviders>
 	)
 
-	const seasons = await getAllSeasonsAvailability(id)
+	const seasons = type === "tv" ? await getAllSeasonsAvailability(id) : null
 
 	return (
 		<div className="mt-20">
@@ -74,32 +90,19 @@ export default async ({ id, type }: { id: number; type: string }) => {
 				const providersForCountry = titleProviders[country.iso_3166_1]
 				if (!providersForCountry) return null
 
-				// Defining the explicit local layout coming out of the maps
-				type LocalSeasonData = {
-					season_name: string
-					season_number: number
-					providers: Record<string, WatchProvider[]>
-				}
-
-				// Updated type declaration here to match the nested object layout
-				const seasonsForCountry: LocalSeasonData[] = (seasons || [])
+				const seasonsForCountry: SeasonProvidersByType[] = (seasons || [])
 					.map(season => {
 						const countryProviders =
 							season.availability[country.iso_3166_1]
 						if (!countryProviders) return null
 
-						const { link, ...providersOnly } = countryProviders
 						return {
 							season_name: season.season_name,
 							season_number: season.season_number,
-							providers: providersOnly as Record<
-								string,
-								WatchProvider[]
-							>
+							providers: getProvidersOnly(countryProviders)
 						}
 					})
-					// Cleaner type guard verification
-					.filter((s): s is LocalSeasonData => s !== null)
+					.filter((s): s is SeasonProvidersByType => s !== null)
 
 				return (
 					<CountryWatchProviders

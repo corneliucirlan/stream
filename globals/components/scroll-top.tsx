@@ -1,38 +1,38 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { FaArrowUp } from "react-icons/fa"
 
 const ScrollToTop = () => {
 	const [isVisible, setIsVisible] = useState(false)
 
-	const toggleVisibility = () => {
+	const toggleVisibility = useCallback(() => {
 		if (window.pageYOffset > 300) setIsVisible(true)
 		else setIsVisible(false)
-	}
+	}, [])
 
-	const scrollToTop = () => {
+	const scrollToTop = useCallback(() => {
 		window.scrollTo({
 			top: 0,
 			behavior: "smooth"
 		})
-	}
-
-	const handleKeyPress = (event: KeyboardEvent) => {
-		if (event.key === "T" || event.key === "t") {
-			scrollToTop()
-		}
-	}
+	}, [])
 
 	useEffect(() => {
+		const handleKeyPress = (event: KeyboardEvent) => {
+			if (event.key === "T" || event.key === "t") {
+				scrollToTop()
+			}
+		}
+
 		window.addEventListener("scroll", toggleVisibility)
 		window.addEventListener("keydown", handleKeyPress)
 
 		return () => {
 			window.removeEventListener("scroll", toggleVisibility)
-			window.removeEventListener("keypress", handleKeyPress)
+			window.removeEventListener("keydown", handleKeyPress)
 		}
-	}, [])
+	}, [scrollToTop, toggleVisibility])
 
 	return (
 		<div className="fixed bottom-8 right-8 z-50">

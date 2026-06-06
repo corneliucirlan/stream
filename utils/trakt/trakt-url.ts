@@ -20,10 +20,10 @@ const getTraktUrl = async (imdbId: string, type: string) => {
 			return null
 		}
 
-		let data: any
+		let data: TraktSearchResult[]
 		try {
 			data = JSON.parse(text)
-		} catch (err) {
+		} catch {
 			console.error(
 				`Failed to parse Trakt JSON for IMDb ID ${imdbId}:`,
 				text
@@ -35,11 +35,26 @@ const getTraktUrl = async (imdbId: string, type: string) => {
 		if (!result) return null
 
 		const slug =
-			type === "show" ? result.show.ids.slug : result.movie.ids.slug
+			type === "show" ? result.show?.ids.slug : result.movie?.ids.slug
+		if (!slug) return null
+
 		return `https://trakt.tv/${type}s/${slug}`
 	} catch (err) {
 		console.error(`Error fetching Trakt URL for IMDb ID ${imdbId}:`, err)
 		return null
+	}
+}
+
+type TraktSearchResult = {
+	movie?: {
+		ids: {
+			slug: string
+		}
+	}
+	show?: {
+		ids: {
+			slug: string
+		}
 	}
 }
 

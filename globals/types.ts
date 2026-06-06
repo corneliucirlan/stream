@@ -12,8 +12,8 @@ export interface SearchResult {
 	id: number
 	title: string
 	type: MediaType
-	poster: string
-	year: string
+	poster: string | null
+	year?: string
 }
 
 export interface Country {
@@ -53,6 +53,12 @@ export interface SeasonAvailability {
 	season_number: number
 	providers: WatchProvider[]
 	// providers: Omit<CountryAvailability, "link"> | null
+}
+
+export interface SeasonProvidersByType {
+	season_name: string
+	season_number: number
+	providers: Record<string, WatchProvider[]>
 }
 
 // --- Credits & Images ---

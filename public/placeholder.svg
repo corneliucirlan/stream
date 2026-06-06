@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="592" height="841" viewBox="0 0 592 841" role="img" aria-labelledby="title desc">
+	<title id="title">Poster unavailable</title>
+	<desc id="desc">A neutral placeholder shown when TMDB has no poster image.</desc>
+	<rect width="592" height="841" fill="#171717"/>
+	<rect x="32" y="32" width="528" height="777" rx="18" fill="#242424" stroke="#3f3f46" stroke-width="2"/>
+	<path d="M176 337h240v168H176z" fill="#2f2f35"/>
+	<path d="m176 505 76-86 52 58 38-43 74 71H176z" fill="#52525b"/>
+	<circle cx="377" cy="381" r="28" fill="#71717a"/>
+	<text x="296" y="594" fill="#a1a1aa" font-family="Arial, Helvetica, sans-serif" font-size="30" text-anchor="middle">No poster</text>
+</svg>

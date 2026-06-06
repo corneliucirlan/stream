@@ -1,7 +1,11 @@
-import { CategoryProvidersProps, WatchProvider } from "@/globals/types"
+import { CategoryProvidersProps } from "@/globals/types"
 import Provider from "@/sections/details/watch/provider"
 
-export default ({ type, category, seasons }: CategoryProvidersProps) => {
+export default function CategoryProvidersComponent({
+	type,
+	category,
+	seasons
+}: CategoryProvidersProps) {
 	return (
 		<article className="mb-6">
 			<h3 className="mt-4 mb-2 text-xl font-semibold capitalize opacity-80">
@@ -9,7 +13,7 @@ export default ({ type, category, seasons }: CategoryProvidersProps) => {
 			</h3>
 
 			<div className="flex flex-wrap gap-4">
-				{category.map((watch: WatchProvider) => {
+				{category.map(watch => {
 					const availableInSeasons = seasons
 						.filter(s =>
 							s.providers?.some(

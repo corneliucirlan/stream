@@ -4,29 +4,35 @@ import { ImagesObject } from "@/globals/types"
 import TitleInfo from "@/sections/details/title-info"
 import TitleOffers from "@/sections/details/title-providers"
 import { createApiRequest } from "@/utils/tmdb/tmdb-api"
+import { notFound } from "next/navigation"
 
-export default async ({
+export default async function WatchPage({
 	params
 }: {
-	params: Promise<{ type: string; id: number }>
-}) => {
+	params: Promise<{ type: string; id: string }>
+}) {
 	const { type, id } = await params
+	const mediaType = type === "movie" || type === "tv" ? type : null
+	const mediaId = Number(id)
 
-	const getRandomArrayIndex = (length: number) => {
+	if (!mediaType || !Number.isInteger(mediaId)) notFound()
+
+	const getBackdropIndex = (length: number) => {
 		if (!length) return null
 
-		const randomIndex = Math.floor(Math.random() * length)
-		return randomIndex
+		return mediaId % length
 	}
 
 	// Get all available images
 	const images: ImagesObject | undefined = await createApiRequest(
-		`/${type}/${id}/images`
+		`/${mediaType}/${mediaId}/images`
 	)
 	const index: number | null | undefined =
-		images && getRandomArrayIndex(images.backdrops.length)
-	const backdrop: string | 0 | null | undefined =
-		index && images && images.backdrops[index].file_path
+		images && getBackdropIndex(images.backdrops.length)
+	const backdrop: string | undefined =
+		index === null || index === undefined
+			? undefined
+			: images?.backdrops[index]?.file_path
 
 	return (
 		<>
@@ -42,8 +48,8 @@ export default async ({
 				</a>
 			</span>
 			<div className="container mx-4 mt-5 max-w-7xl text-white md:mx-auto md:mt-10">
-				<TitleInfo type={type} id={id} />
-				<TitleOffers type={type} id={id} />
+				<TitleInfo type={mediaType} id={mediaId} />
+				<TitleOffers type={mediaType} id={mediaId} />
 				<ScrollToTop />
 			</div>
 		</>
