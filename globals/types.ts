@@ -178,6 +178,12 @@ export interface ProviderProps {
 	availableSeasons?: number[]
 }
 
+export interface CountryAvailabilityProps {
+	countryCode: string
+	countryName: string
+	availableSeasons?: number[]
+}
+
 export interface CategoryProvidersProps {
 	type: AvailabilityType | string
 	category: WatchProvider[]
