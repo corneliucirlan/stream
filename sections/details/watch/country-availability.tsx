@@ -15,7 +15,7 @@ export default function CountryAvailability({
 	const sortedSeasons = [...availableSeasons].sort((a, b) => a - b)
 
 	return (
-		<div className="inline-flex w-28 flex-col items-center p-2 text-center">
+		<div className="inline-flex w-24 flex-col items-center p-1.5 text-center md:w-28 md:p-2">
 			<span
 				className="text-3xl leading-none"
 				style={{

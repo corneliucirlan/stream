@@ -232,7 +232,7 @@ export default async function TitleProviders({
 									Countries
 								</h3>
 
-								<div className="flex flex-wrap gap-4">
+								<div className="grid grid-cols-3 gap-2 md:flex md:flex-wrap md:gap-4">
 									{section.countries.map(country => (
 										<CountryAvailability
 											key={country.countryCode}

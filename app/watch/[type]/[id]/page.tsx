@@ -47,7 +47,7 @@ export default async function WatchPage({
 					JustWatch
 				</a>
 			</span>
-			<div className="container mx-4 mt-5 max-w-7xl text-white md:mx-auto md:mt-10">
+			<div className="container mx-auto mt-5 max-w-7xl px-4 text-white md:mt-10 md:px-0">
 				<TitleInfo type={mediaType} id={mediaId} />
 				<TitleOffers type={mediaType} id={mediaId} />
 				<ScrollToTop />
