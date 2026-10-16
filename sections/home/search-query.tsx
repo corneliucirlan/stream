@@ -29,7 +29,7 @@ export default function SearchQuery({
 	}, [value, onSearch])
 
 	return (
-		<div className="m-auto mt-20 w-1/2">
+		<div className="m-auto mx-5 mt-20 w-auto md:mx-auto md:w-1/2">
 			<input
 				type="text"
 				className="w-full rounded bg-white p-3 px-5 py-3 text-gray-700 outline-none"

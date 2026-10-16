@@ -3,6 +3,7 @@ import ScrollToTop from "@/globals/components/scroll-top"
 import { ImagesObject } from "@/globals/types"
 import TitleInfo from "@/sections/details/title-info"
 import TitleOffers from "@/sections/details/title-providers"
+import homepageBackdrop from "@/utils/tmdb/homepage-backdrop"
 import { createApiRequest } from "@/utils/tmdb/tmdb-api"
 import { notFound } from "next/navigation"
 

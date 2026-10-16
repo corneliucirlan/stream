@@ -6,12 +6,12 @@ type TmdbTrendingResult = {
 	backdrop_path?: string | null
 }
 
-const homepageBackdrop = async (): Promise<string | undefined> => {
+const homepageBackdrop = async (): Promise<string | null> => {
 	const data = await createApiRequest<{ results: TmdbTrendingResult[] }>(
 		"/trending/all/day"
 	)
 
-	return data?.results?.[0]?.backdrop_path ?? undefined
+	return data?.results?.[0]?.backdrop_path ?? null
 }
 
 export default homepageBackdrop

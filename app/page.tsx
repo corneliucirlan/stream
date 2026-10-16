@@ -5,6 +5,8 @@ import SearchQuery from "@/sections/home/search-query"
 import SearchResults from "@/sections/home/search-results"
 import LoadingResults from "@/sections/home/search/loading-results"
 import { SearchResult } from "@/globals/types"
+import homepageBackdrop from "@/utils/tmdb/homepage-backdrop"
+import Backdrop from "@/globals/components/backdrop"
 
 const STORAGE_KEY = "movieSearch"
 
@@ -14,6 +16,7 @@ export default function Home() {
 	const [loading, setLoading] = useState(false)
 	const [hydrated, setHydrated] = useState(false)
 	const abortControllerRef = useRef<AbortController | null>(null)
+	const [bgImage, setBGImage] = useState<string | null>(null)
 
 	// Load saved search from sessionStorage
 	useEffect(() => {
@@ -27,6 +30,10 @@ export default function Home() {
 			}
 			setHydrated(true)
 		}, 0)
+
+		homepageBackdrop().then(image => {
+			setBGImage(image)
+		})
 
 		return () => window.clearTimeout(timeoutId)
 	}, [])
@@ -84,14 +91,17 @@ export default function Home() {
 	)
 
 	return (
-		<div className="container mx-auto max-w-7xl">
-			{hydrated && (
-				<SearchQuery onSearch={fetchResults} initialValue={query} />
-			)}
-			{!loading && hydrated && (
-				<SearchResults results={results} query={query} />
-			)}
-			{loading && <LoadingResults />}
-		</div>
+		<>
+			{bgImage && <Backdrop image={bgImage} />}
+			<div className="container mx-auto max-w-7xl">
+				{hydrated && (
+					<SearchQuery onSearch={fetchResults} initialValue={query} />
+				)}
+				{!loading && hydrated && (
+					<SearchResults results={results} query={query} />
+				)}
+				{loading && <LoadingResults />}
+			</div>
+		</>
 	)
 }
