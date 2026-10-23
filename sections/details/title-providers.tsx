@@ -65,6 +65,11 @@ const FEATURED_PROVIDERS = [
 		label: "Disney+",
 		matches: ["disney plus"],
 		matchMode: "exact"
+	},
+	{
+		label: "Prime Video",
+		matches: ["prime video", "amazon prime video"],
+		matchMode: "includes"
 	}
 ] as const
 
@@ -97,8 +102,8 @@ const getFeaturedSeasonNumbers = (
 	)
 
 	if (seasonsWithCountryData.length === 0) {
-		return getFeaturedProviders(providersForCountry, matches, matchMode).length >
-			0
+		return getFeaturedProviders(providersForCountry, matches, matchMode)
+			.length > 0
 			? seasons.map(season => season.season_number)
 			: []
 	}
@@ -189,7 +194,8 @@ export default async function TitleProviders({
 				}
 			})
 			.filter(
-				(country): country is NonNullable<typeof country> => country !== null
+				(country): country is NonNullable<typeof country> =>
+					country !== null
 			)
 
 		return {
@@ -238,7 +244,9 @@ export default async function TitleProviders({
 											key={country.countryCode}
 											countryCode={country.countryCode}
 											countryName={country.countryName}
-											availableSeasons={country.availableSeasons}
+											availableSeasons={
+												country.availableSeasons
+											}
 										/>
 									))}
 								</div>
@@ -252,7 +260,9 @@ export default async function TitleProviders({
 				const providersForCountry = titleProviders[country.iso_3166_1]
 				if (!providersForCountry) return null
 
-				const seasonsForCountry: SeasonProvidersByType[] = (seasons || [])
+				const seasonsForCountry: SeasonProvidersByType[] = (
+					seasons || []
+				)
 					.map(season => {
 						const countryProviders =
 							season.availability[country.iso_3166_1]
